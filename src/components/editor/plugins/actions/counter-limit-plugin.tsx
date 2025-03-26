@@ -20,7 +20,7 @@ export function CharacterLimitPlugin({
               : "text-gray-500"
           }`}
         >
-          {number.remainingCharacters}
+          Remaining Characters : {number.remainingCharacters}
         </div>
       )}
     />

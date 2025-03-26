@@ -80,7 +80,10 @@ export function Plugins() {
           contentEditable={
             <div className="">
               <div className="" ref={onRef}>
-                <ContentEditable placeholder={"Start typing ..."} />
+                <ContentEditable
+                  className="h-[300px] m-0 p-0"
+                  placeholder="Start typing ..."
+                />
               </div>
             </div>
           }

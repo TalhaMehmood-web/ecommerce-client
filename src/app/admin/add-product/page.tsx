@@ -1,8 +1,13 @@
-import AddProductForm from "@/components/app/(admin)/add-product";
+import AddProductView from "@/components/app/(admin)/add-product";
+import PageWrapper from "@/components/shared/page-wrapper";
 import React from "react";
 
 const AddProductPage = () => {
-  return <AddProductForm />;
+  return (
+    <PageWrapper>
+      <AddProductView />
+    </PageWrapper>
+  );
 };
 
 export default AddProductPage;

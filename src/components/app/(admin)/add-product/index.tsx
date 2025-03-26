@@ -1,7 +1,12 @@
 import React from "react";
+import AddProductForm from "./form";
 
-const AddProductForm = () => {
-  return <div>AddProductForm</div>;
+const AddProductView = () => {
+  return (
+    <div className="flex-1">
+      <AddProductForm />
+    </div>
+  );
 };
 
-export default AddProductForm;
+export default AddProductView;

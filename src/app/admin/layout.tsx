@@ -11,7 +11,7 @@ const AdminLayout: React.FC<AuthLayoutProps> = ({ children }) => {
       <SidebarProvider>
         <div className="w-full min-h-screen flex">
           <AdminSidebar />
-          <main>{children}</main>
+          <main className="flex-1">{children}</main>
         </div>
       </SidebarProvider>
     </div>
