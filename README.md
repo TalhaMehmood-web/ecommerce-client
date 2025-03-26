@@ -1,3 +1,7 @@
+# node version -> 22.13.1
+
+# stack (next.js 15 + tailwind css + shadcn)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
