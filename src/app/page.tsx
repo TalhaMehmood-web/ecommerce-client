@@ -1,7 +1,17 @@
+"use client";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const page = () => {
-  return <div className="font-nunito-sans">page</div>;
+  const router = useRouter();
+  return (
+    <div className="font-nunito-sans">
+      <Button onClick={() => router.push("/admin/add-product")}>
+        Go to Admin
+      </Button>
+    </div>
+  );
 };
 
 export default page;
