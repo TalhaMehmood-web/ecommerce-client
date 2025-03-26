@@ -1,3 +1,7 @@
-export default function Home() {
-  return <div>talha</div>;
-}
+import React from "react";
+
+const page = () => {
+  return <div className="font-nunito-sans">page</div>;
+};
+
+export default page;
