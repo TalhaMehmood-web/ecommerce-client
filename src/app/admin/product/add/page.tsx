@@ -7,13 +7,14 @@ import React from "react";
 const AddProductPage = () => {
   return (
     <PageWrapper className="flex flex-col gap-1.5">
-      <PageTitle title="Add Product" />
       <PageBreadCrumb
         items={[
           { title: "Dashboard", href: "/admin/dashboard" },
           { title: "Add Product" },
         ]}
       />
+      <PageTitle title="Add Product" />
+
       <AddProductView />
     </PageWrapper>
   );

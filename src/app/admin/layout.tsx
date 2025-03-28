@@ -8,17 +8,15 @@ interface AuthLayoutProps {
 
 const AdminLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   return (
-    <div>
-      <SidebarProvider>
-        <div className="w-full min-h-screen flex">
-          <AdminSidebar />
-          <main className="flex-1 flex flex-col ">
-            <Navbar />
-            <div className="flex-1 ">{children}</div>
-          </main>
-        </div>
-      </SidebarProvider>
-    </div>
+    <SidebarProvider>
+      <div className="w-full min-h-screen flex ">
+        <AdminSidebar />
+        <main className="flex-1 flex flex-col  overflow-hidden ">
+          <Navbar />
+          <div className="flex-1 ">{children}</div>
+        </main>
+      </div>
+    </SidebarProvider>
   );
 };
 
