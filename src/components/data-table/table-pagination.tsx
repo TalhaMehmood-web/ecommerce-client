@@ -37,7 +37,7 @@ const TablePagination = ({
   const endItem = Math.min(currentPage * pageSize, totalItems);
 
   return (
-    <div className="flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between mt-4 animate-fade-in">
+    <div className=" flex flex-col-reverse gap-4 px-2 py-4 sm:flex-row sm:items-center sm:justify-between mt-4 animate-fade-in">
       <div className="text-sm text-muted-foreground">
         Showing {startItem} to {endItem} of {totalItems} items
       </div>

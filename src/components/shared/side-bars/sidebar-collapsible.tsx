@@ -20,6 +20,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import React from "react";
 
@@ -47,6 +48,8 @@ const SidebarCollapsible: React.FC<SidebarCollapsibleProps> = ({
   items = [],
   defaultOpen = true,
 }) => {
+  const { open, setOpen } = useSidebar();
+  console.log("open", open);
   return (
     <Collapsible defaultOpen={defaultOpen} className="group/collapsible">
       <SidebarGroup className="select-none">
@@ -65,7 +68,7 @@ const SidebarCollapsible: React.FC<SidebarCollapsibleProps> = ({
                 const IconComponent = iconMap[item.icon];
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton onClick={() => setOpen(false)} asChild>
                       <Link href={item.url} className="flex items-center gap-2">
                         <IconComponent className="w-5 h-5" />
                         <span>{item.title}</span>
