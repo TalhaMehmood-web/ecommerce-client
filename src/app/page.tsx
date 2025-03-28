@@ -1,20 +1,7 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import React from "react";
+import { redirect } from "next/navigation";
 
 const page = () => {
-  const router = useRouter();
-  return (
-    <div className="font-nunito-sans">
-      <Button onClick={() => router.push("/admin/product/add")}>
-        Go to Admin
-      </Button>
-      <Button onClick={() => router.push("/super-admin")}>
-        Go to Super Admin
-      </Button>
-    </div>
-  );
+  redirect("/login");
 };
 
 export default page;
