@@ -10,7 +10,7 @@ import Link from "next/link";
 import SidebarCollapsible from "../sidebar-collapsible";
 import { SidebarItemProps } from "../sidebar-collapsible";
 
-const superAdminItems: SidebarItemProps[] = [
+const productItems: SidebarItemProps[] = [
   {
     title: "Create",
     url: "/admin/product/add",
@@ -19,6 +19,30 @@ const superAdminItems: SidebarItemProps[] = [
   {
     title: "List",
     url: "/admin/product/list",
+    icon: "Inbox",
+  },
+];
+const customerItems: SidebarItemProps[] = [
+  {
+    title: "Create",
+    url: "/admin/customer/add",
+    icon: "Home",
+  },
+  {
+    title: "List",
+    url: "/admin/customer/list",
+    icon: "Inbox",
+  },
+];
+const orderItems: SidebarItemProps[] = [
+  {
+    title: "Create",
+    url: "/admin/order/add",
+    icon: "Home",
+  },
+  {
+    title: "List",
+    url: "/admin/order/list",
     icon: "Inbox",
   },
 ];
@@ -34,7 +58,9 @@ export default function AdminSidebar() {
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
-        <SidebarCollapsible title="Manage Products" items={superAdminItems} />
+        <SidebarCollapsible title="Manage Products" items={productItems} />
+        <SidebarCollapsible title="Manage Customers" items={customerItems} />
+        <SidebarCollapsible title="Manage Orders" items={orderItems} />
       </SidebarContent>
     </Sidebar>
   );
