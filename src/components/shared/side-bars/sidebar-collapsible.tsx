@@ -11,6 +11,7 @@ import {
   Inbox,
   MessageCircle,
   BellRingIcon,
+  ClockFading,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -48,8 +49,6 @@ const SidebarCollapsible: React.FC<SidebarCollapsibleProps> = ({
   items = [],
   defaultOpen = true,
 }) => {
-  const { open, setOpen } = useSidebar();
-  console.log("open", open);
   return (
     <Collapsible defaultOpen={defaultOpen} className="group/collapsible">
       <SidebarGroup className="select-none">
@@ -68,7 +67,7 @@ const SidebarCollapsible: React.FC<SidebarCollapsibleProps> = ({
                 const IconComponent = iconMap[item.icon];
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton onClick={() => setOpen(false)} asChild>
+                    <SidebarMenuButton asChild>
                       <Link href={item.url} className="flex items-center gap-2">
                         <IconComponent className="w-5 h-5" />
                         <span>{item.title}</span>
