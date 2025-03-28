@@ -15,6 +15,7 @@ const navItems = [
   { label: "Checkout", path: "/checkout" },
   { label: "Wishlist", path: "/wishlist" },
   { label: "Shipping Info", path: "/shipping-info" },
+  { label: "Be a Vendor", path: "/billing" },
 ];
 
 const ClientNavbar = () => {
@@ -23,7 +24,7 @@ const ClientNavbar = () => {
 
   return (
     <div className="w-full bg-white shadow-md rounded-sm">
-      <div className="container mx-auto flex justify-between items-center py-1">
+      <div className="container mx-auto flex justify-between items-center py-1 px-2">
         {/* Navigation Menu */}
         <ClientNavigationMenu />
 
@@ -43,16 +44,6 @@ const ClientNavbar = () => {
             </Link>
           ))}
         </nav>
-
-        {/* "Be a Vendor" Button */}
-        <Button
-          onClick={() => router.push("/billing")}
-          size="sm"
-          variant="link"
-          className="text-primary text-xs font-semibold"
-        >
-          Be a Vendor
-        </Button>
       </div>
     </div>
   );
