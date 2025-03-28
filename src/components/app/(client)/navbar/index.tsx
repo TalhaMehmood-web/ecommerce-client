@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 
 const navItems = [
-  { label: "Home", path: "/client/home" },
-  { label: "My Favorite Stores", path: "/client/favorite-stores" },
-  { label: "Products", path: "/client/products" },
-  { label: "Orders", path: "/client/orders" },
-  { label: "Checkout", path: "/client/checkout" },
-  { label: "Wishlist", path: "/client/wishlist" },
-  { label: "Shipping Info", path: "/client/shipping-info" },
+  { label: "Home", path: "/home" },
+  { label: "My Favorite Stores", path: "/favorite-stores" },
+  { label: "Products", path: "/products" },
+  { label: "Orders", path: "/orders" },
+  { label: "Checkout", path: "/checkout" },
+  { label: "Wishlist", path: "/wishlist" },
+  { label: "Shipping Info", path: "/shipping-info" },
 ];
 
 const ClientNavbar = () => {
