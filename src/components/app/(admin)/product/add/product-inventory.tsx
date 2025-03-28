@@ -77,7 +77,7 @@ const ProductInventory = () => {
 
   return (
     <motion.div
-      className="w-full max-w-7xl mx-auto lg:h-[440px] "
+      className=" lg:h-[440px] "
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -89,15 +89,15 @@ const ProductInventory = () => {
           onValueChange={setActiveTab}
           className="flex flex-col lg:flex-row"
         >
-          <div className="lg:border-r border-b lg:border-b-0 border-slate-200/70 dark:border-slate-700/30 bg-slate-50/80 dark:bg-slate-900/20">
-            <TabsList className="h-auto  w-full grid grid-cols-3 lg:grid-cols-none lg:grid-rows-6 gap-1 bg-transparent">
+          <div className="lg:border-r flex-[0.3] border-b lg:border-b-0 border-slate-200/70 dark:border-slate-700/30 bg-slate-50/80 dark:bg-slate-900/20">
+            <TabsList className="h-auto flex-1 lg:flex lg:flex-col    w-full grid grid-cols-3 lg:grid-cols-none lg:grid-rows-6 gap-1 bg-transparent">
               {Object.entries(iconMap).map(([key, Icon]) => (
                 <TabsTrigger
                   key={key}
                   value={key}
                   onClick={() => setActiveTab(key)}
                   className={cn(
-                    "flex w-full  gap-3 px-4 py-3 justify-start font-normal hover:bg-white/60 dark:hover:bg-slate-800/60 data-[state=active]:shadow transition-all duration-200",
+                    "flex w-full  justify-start flex-1 gap-3 px-4 py-3 font-normal hover:bg-white/60 dark:hover:bg-slate-800/60 data-[state=active]:shadow transition-all duration-200",
                     "data-[state=active]:bg-white data-[state=active]:dark:bg-slate-800 data-[state=active]:text-primary",
                     "lg:rounded-none rounded-lg"
                   )}

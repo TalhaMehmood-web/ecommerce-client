@@ -30,7 +30,7 @@ const iconMap = {
   BellRingIcon,
 } as const;
 
-interface SidebarItem {
+export interface SidebarItemProps {
   title: string;
   url: string;
   icon: keyof typeof iconMap;
@@ -38,13 +38,13 @@ interface SidebarItem {
 
 interface SidebarCollapsibleProps {
   title: string;
-  items?: SidebarItem[];
-  defaultOpen: boolean;
+  items?: SidebarItemProps[];
+  defaultOpen?: boolean;
 }
 
 const SidebarCollapsible: React.FC<SidebarCollapsibleProps> = ({
   title,
-  items,
+  items = [],
   defaultOpen = true,
 }) => {
   return (
@@ -52,7 +52,7 @@ const SidebarCollapsible: React.FC<SidebarCollapsibleProps> = ({
       <SidebarGroup className="select-none">
         <SidebarGroupLabel asChild>
           <CollapsibleTrigger asChild>
-            <div className="bg-slate-200 text-nowrap py-6 cursor-pointer text-[20px] font-extrabold flex items-center">
+            <div className="bg-slate-200 text-nowrap py-6 cursor-pointer text-base font-extrabold flex items-center">
               <p>{title}</p>
               <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
             </div>
@@ -61,13 +61,13 @@ const SidebarCollapsible: React.FC<SidebarCollapsibleProps> = ({
         <CollapsibleContent>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items?.map((item) => {
+              {items.map((item) => {
                 const IconComponent = iconMap[item.icon];
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <Link href={item.url} className="flex items-center gap-2">
-                        {IconComponent && <IconComponent className="w-5 h-5" />}
+                        <IconComponent className="w-5 h-5" />
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>

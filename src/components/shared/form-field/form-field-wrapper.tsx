@@ -11,7 +11,7 @@ const FormFieldWrapper: React.FC<FormFieldWrapperProps> = ({
   className,
 }) => {
   return (
-    <div className={clsx("flex flex-col gap-2", className)}>{children}</div>
+    <div className={clsx("flex flex-col  gap-2", className)}>{children}</div>
   );
 };
 

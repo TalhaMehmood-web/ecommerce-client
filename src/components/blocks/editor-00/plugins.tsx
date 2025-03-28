@@ -81,7 +81,7 @@ export function Plugins() {
             <div className="">
               <div className="" ref={onRef}>
                 <ContentEditable
-                  className="h-[300px] m-0 p-0"
+                  className="h-[250px] w-full m-0 p-0"
                   placeholder="Start typing ..."
                 />
               </div>

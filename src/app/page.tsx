@@ -7,7 +7,7 @@ const page = () => {
   const router = useRouter();
   return (
     <div className="font-nunito-sans">
-      <Button onClick={() => router.push("/admin/add-product")}>
+      <Button onClick={() => router.push("/admin/product/add")}>
         Go to Admin
       </Button>
     </div>
