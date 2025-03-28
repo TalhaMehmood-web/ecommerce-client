@@ -62,7 +62,7 @@ const LoginForm = () => {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Redirect to home page after successful login
-      router.push("/");
+      router.push("/client");
     } catch (err) {
       console.error("Login error:", err);
       setError("Invalid email or password. Please try again.");

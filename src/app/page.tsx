@@ -10,6 +10,9 @@ const page = () => {
       <Button onClick={() => router.push("/admin/product/add")}>
         Go to Admin
       </Button>
+      <Button onClick={() => router.push("/super-admin")}>
+        Go to Super Admin
+      </Button>
     </div>
   );
 };

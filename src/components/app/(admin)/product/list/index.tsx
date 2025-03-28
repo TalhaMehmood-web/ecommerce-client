@@ -1,124 +1,53 @@
 "use client";
 
-import { useState } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Loader2 } from "lucide-react";
 import axios from "axios";
-import TablePagination from "@/components/data-table/table-pagination";
+import DataTable from "@/components/shared/data-table";
+import ProductsListFilters from "./filters";
 
-interface Column<T> {
-  key: keyof T;
-  label: string;
-  minWidth?: string;
-  render?: (item: T) => React.ReactNode;
+interface User {
+  id: number;
+  name: string;
+  email: string;
 }
 
-interface TableProps<T> {
-  columns: Column<T>[];
-  endpoint: string;
-  pageSize?: number;
-}
+const fetchUsers = async (): Promise<User[]> => {
+  const response = await axios.get(
+    "https://jsonplaceholder.typicode.com/users"
+  );
+  return response.data;
+};
 
-export default function DataTable<T>({ columns, endpoint }: TableProps<T>) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["tableData", endpoint, currentPage],
-    queryFn: async () => {
-      const response = await axios.get(
-        `${endpoint}?page=${currentPage}&limit=${pageSize}`
-      );
-      return response.data;
-    },
-    placeholderData: (previousData) => previousData,
+const ListProductView = () => {
+  const { data, isLoading, isError } = useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: fetchUsers,
   });
 
-  return (
-    <div className="w-full">
-      {/* Responsive container with shadow and rounded corners */}
-      <div className="rounded-lg shadow-md bg-white overflow-hidden">
-        {/* Table container with horizontal scroll */}
-        <div className="overflow-x-auto w-full min-w-2xl ">
-          <Table className="w-full">
-            <TableHeader>
-              <TableRow>
-                {columns.map((col) => (
-                  <TableHead
-                    style={{ minWidth: col.minWidth }}
-                    key={col.key as string}
-                    className="text-left whitespace-nowrap"
-                  >
-                    {col.label}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="text-center py-4"
-                  >
-                    <Loader2 className="animate-spin mx-auto text-gray-500" />
-                  </TableCell>
-                </TableRow>
-              ) : isError ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="text-center text-red-500"
-                  >
-                    Error loading data
-                  </TableCell>
-                </TableRow>
-              ) : (
-                data?.map((item: any, index: number) => (
-                  <motion.tr
-                    key={item.id || index}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    className="border-b hover:bg-gray-100 transition"
-                  >
-                    {columns.map((col) => (
-                      <TableCell
-                        style={{ minWidth: col.minWidth }}
-                        key={col.key as string}
-                        className="py-3 px-4 whitespace-nowrap"
-                      >
-                        {col.render
-                          ? col.render(item)
-                          : (item[col.key] as React.ReactNode)}
-                      </TableCell>
-                    ))}
-                  </motion.tr>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </div>
+  const columns: { key: keyof User; label: string; minWidth: string }[] = [
+    { key: "id", label: "ID", minWidth: "100px" },
+    { key: "name", label: "Name", minWidth: "200px" },
+    { key: "email", label: "Email", minWidth: "250px" },
+  ];
 
-        {/* Pagination - fixed at the bottom and doesn't scroll horizontally */}
-        <TablePagination
-          currentPage={1}
-          totalPages={3}
-          pageSize={pageSize}
-          totalItems={10}
-          onPageChange={setCurrentPage}
-          onPageSizeChange={setPageSize}
-        />
-      </div>
+  return (
+    <div className="flex flex-col gap-2">
+      <ProductsListFilters />
+      <DataTable<User>
+        columns={columns}
+        data={data || []}
+        isLoading={isLoading}
+        isError={isError}
+        currentPage={1}
+        pageSize={10}
+        totalPages={1}
+        totalItems={data?.length || 0}
+        onPageChange={() => {}}
+        onPageSizeChange={() => {}}
+      />
     </div>
   );
-}
+};
+
+export default ListProductView;
