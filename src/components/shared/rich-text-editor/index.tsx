@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SerializedEditorState } from "lexical";
 import { Editor } from "@/components/blocks/editor-00/editor";
+import { useFormContext } from "react-hook-form";
 
 export const initialValue = {
   root: {
@@ -35,9 +36,14 @@ export const initialValue = {
 } as unknown as SerializedEditorState;
 
 export default function RichTextEditor() {
-  const [editorState, setEditorState] =
-    useState<SerializedEditorState>(initialValue);
+  const { setValue, getValues } = useFormContext();
+  const [editorState, setEditorState] = useState<SerializedEditorState>(
+    getValues("description") || initialValue
+  );
 
+  useEffect(() => {
+    setValue("description", editorState);
+  }, [editorState]);
   return (
     <Editor
       editorSerializedState={editorState}

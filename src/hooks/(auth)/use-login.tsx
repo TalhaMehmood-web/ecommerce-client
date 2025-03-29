@@ -18,7 +18,7 @@ export const useLogin = () => {
             return;
           }
           if (data.data?.user.role === "super_admin") {
-            router.push("/super_admin");
+            router.push("/super-admin");
           } else {
             router.push("/home");
           }
