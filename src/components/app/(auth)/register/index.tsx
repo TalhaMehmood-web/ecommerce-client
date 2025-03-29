@@ -28,11 +28,15 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
+import { useRegister } from "@/hooks/(auth)/use-register";
+import PasswordInput from "@/components/shared/form-field/password-input";
 
 // Define the form schema with validation
 const formSchema = z
   .object({
-    name: z.string().min(2, { message: "Name must be at least 2 characters" }),
+    fullname: z
+      .string()
+      .min(2, { message: "Name must be at least 2 characters" }),
     email: z.string().email({ message: "Please enter a valid email address" }),
     password: z
       .string()
@@ -51,15 +55,13 @@ type FormValues = z.infer<typeof formSchema>;
 
 const RegisterForm = () => {
   const router = useRouter();
-
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
+  const mutation = useRegister();
 
   // Initialize the form
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      fullname: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -69,31 +71,11 @@ const RegisterForm = () => {
 
   // Handle form submission
   const onSubmit = async (data: FormValues) => {
-    setIsLoading(true);
-    setError(null);
-
     try {
-      // Here you would typically connect to your authentication service
-      console.log("Registration attempt with:", data);
-
-      // Simulate API call with a timeout
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // For demo purposes - show toast on success
-      //   toast({
-      //     title: "Registration successful",
-      //     description: "Welcome to our platform, " + data.name + "!",
-      //   });
-
-      // Redirect to home page after successful registration
-      router.push("/");
+      mutation.mutateAsync(data);
+      // router.push("/login");
     } catch (err) {
       console.error("Registration error:", err);
-      setError(
-        "There was a problem registering your account. Please try again."
-      );
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -108,15 +90,9 @@ const RegisterForm = () => {
       <CardContent className="px-0">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {error && (
-              <Alert variant="destructive" className="mb-4">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
             <FormField
               control={form.control}
-              name="name"
+              name="fullname"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
@@ -127,7 +103,7 @@ const RegisterForm = () => {
                         placeholder="Talha Mehmood"
                         className="pl-10"
                         {...field}
-                        autoComplete="name"
+                        autoComplete="fullname"
                       />
                     </div>
                   </FormControl>
@@ -165,16 +141,7 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        className="pl-10"
-                        {...field}
-                        autoComplete="new-password"
-                      />
-                    </div>
+                    <PasswordInput field={field} placeholder="••••••••" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -188,16 +155,7 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        className="pl-10"
-                        {...field}
-                        autoComplete="new-password"
-                      />
-                    </div>
+                    <PasswordInput field={field} placeholder="••••••••" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -228,8 +186,12 @@ const RegisterForm = () => {
               )}
             />
 
-            <Button type="submit" className="w-full mt-6" disabled={isLoading}>
-              {isLoading ? (
+            <Button
+              type="submit"
+              className="w-full mt-6"
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></span>
                   Creating account...

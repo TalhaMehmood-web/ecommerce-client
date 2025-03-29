@@ -6,18 +6,17 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// Add a response interceptor
 axiosInstance.interceptors.response.use(
-  (response) => response, // If response is successful, return it as is
+  (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      const returnUrl = window.location.pathname + window.location.search; // Save current page URL
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      const returnUrl = window.location.pathname + window.location.search;
       window.location.href = `/login?returnUrl=${encodeURIComponent(
         returnUrl
       )}`;
       localStorage.clear();
     }
-    return Promise.reject(error);
+    return Promise.reject(error); // Forward error to catch block
   }
 );
 

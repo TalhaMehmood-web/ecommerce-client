@@ -3,7 +3,7 @@ import React from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock, LogIn } from "lucide-react";
+import { Mail, LogIn } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -22,8 +22,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
+import PasswordInput from "@/components/shared/form-field/password-input";
+import { useLogin } from "@/hooks/(auth)/use-login";
 
 // Define the form schema with validation
 const formSchema = z.object({
@@ -37,9 +38,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 const LoginForm = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
-
+  const mutation = useLogin();
   // Initialize the form
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -49,26 +48,8 @@ const LoginForm = () => {
     },
   });
 
-  // Handle form submission
   const onSubmit = async (data: FormValues) => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // Here you would typically connect to your authentication service
-      console.log("Login attempt with:", data);
-
-      // Simulate API call with a timeout
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Redirect to home page after successful login
-      router.push("/home");
-    } catch (err) {
-      console.error("Login error:", err);
-      setError("Invalid email or password. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    mutation.mutateAsync(data);
   };
 
   return (
@@ -82,12 +63,6 @@ const LoginForm = () => {
       <CardContent className="px-0">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {error && (
-              <Alert variant="destructive" className="mb-4">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
             <FormField
               control={form.control}
               name="email"
@@ -117,24 +92,22 @@ const LoginForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        className="pl-10"
-                        {...field}
-                        autoComplete="current-password"
-                      />
-                    </div>
+                    <PasswordInput
+                      field={field}
+                      placeholder="Enter your password"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button type="submit" className="w-full mt-6" disabled={isLoading}>
-              {isLoading ? (
+            <Button
+              type="submit"
+              className="w-full mt-6"
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></span>
                   Logging in...
