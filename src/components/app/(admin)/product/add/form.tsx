@@ -29,7 +29,7 @@ const AddProductForm = () => {
           status: "",
         },
         shipping: {
-          fulfillmentOption: "",
+          fulfillmentOption: "phoenix",
           packageDimensions: {
             width: "",
             height: "",
@@ -37,8 +37,8 @@ const AddProductForm = () => {
             weight: "",
           },
         },
-        attribute: "",
-        advancce: {
+        attribute: [],
+        advance: {
           identification: {
             idType: "",
             productId: "",
@@ -63,6 +63,7 @@ const AddProductForm = () => {
   return (
     <FormProvider {...methods}>
       <form
+        noValidate
         onSubmit={handleSubmit(handleAddProduct)}
         className="flex-1 flex-col h-auto items-start flex gap-4  "
       >

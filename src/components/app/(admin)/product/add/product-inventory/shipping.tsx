@@ -5,8 +5,13 @@ import { fadeIn, itemVariants } from "./animation-variants";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useFormContext } from "react-hook-form";
 
 const ProductInventoryShipping = () => {
+  const { watch, setValue, register } = useFormContext();
+  const { fulfillmentOption, packageDimensions } = watch("inventory.shipping");
+  const { width, height, length, weight } = packageDimensions;
+
   return (
     <TabsContent
       value="shipping"
@@ -21,7 +26,13 @@ const ProductInventoryShipping = () => {
         <div className="p-5 rounded-lg bg-slate-50/50 dark:bg-slate-900/10 border border-slate-200/80 dark:border-slate-700/20">
           <h3 className="text-sm font-medium mb-4">Fulfillment Options</h3>
 
-          <RadioGroup defaultValue="seller" className="space-y-4">
+          <RadioGroup
+            value={fulfillmentOption}
+            onValueChange={(value) =>
+              setValue("inventory.shipping.fulfillmentOption", value)
+            }
+            className="space-y-4"
+          >
             <motion.div
               variants={itemVariants}
               className="flex items-start space-x-4 p-4 rounded-lg border border-slate-200/80 dark:border-slate-700/20 hover:bg-white/80 dark:hover:bg-black/20 transition-colors"
@@ -72,19 +83,35 @@ const ProductInventoryShipping = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label className="text-xs">Width (cm)</Label>
-              <Input placeholder="0.00" className="bg-white dark:bg-black/20" />
+              <Input
+                {...register("inventory.shipping.packageDimensions.width")}
+                placeholder="0.00"
+                className="bg-white dark:bg-black/20"
+              />
             </div>
             <div className="space-y-2">
               <Label className="text-xs">Height (cm)</Label>
-              <Input placeholder="0.00" className="bg-white dark:bg-black/20" />
+              <Input
+                {...register("inventory.shipping.packageDimensions.height")}
+                placeholder="0.00"
+                className="bg-white dark:bg-black/20"
+              />
             </div>
             <div className="space-y-2">
               <Label className="text-xs">Length (cm)</Label>
-              <Input placeholder="0.00" className="bg-white dark:bg-black/20" />
+              <Input
+                {...register("inventory.shipping.packageDimensions.length")}
+                placeholder="0.00"
+                className="bg-white dark:bg-black/20"
+              />
             </div>
             <div className="space-y-2">
               <Label className="text-xs">Weight (kg)</Label>
-              <Input placeholder="0.00" className="bg-white dark:bg-black/20" />
+              <Input
+                {...register("inventory.shipping.packageDimensions.weight")}
+                placeholder="0.00"
+                className="bg-white dark:bg-black/20"
+              />
             </div>
           </div>
         </motion.div>

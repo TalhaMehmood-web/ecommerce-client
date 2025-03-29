@@ -42,6 +42,7 @@ const ProductInventoryPricing = () => {
             <div className="relative">
               <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground/70" />
               <Input
+                type="number"
                 {...register("inventory.pricing.regularPrice")}
                 placeholder="99.99"
                 className="pl-10"
@@ -62,6 +63,7 @@ const ProductInventoryPricing = () => {
             <div className="relative">
               <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground/70" />
               <Input
+                type="number"
                 {...register("inventory.pricing.salesPrice")}
                 placeholder="79.99"
                 className="pl-10"

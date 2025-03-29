@@ -6,8 +6,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Globe } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import MultipleSelector, { Option } from "@/components/ui/multi-selector";
+import COUNTRIES from "@/lib/countries";
+import { useFormContext } from "react-hook-form";
 
 const ProductInventoryGlobalDelivery = () => {
+  const { watch, setValue, register } = useFormContext();
+  const { countries } = watch("inventory.global.countries");
+  const isLocalDeliveryEnabled = watch(
+    "inventory.global.localDelivery.enabled"
+  );
+  const handleAddCountries = (selectedCountries: Option[]) => {
+    setValue("inventory.global.countries", selectedCountries, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+  // deliveryRadius: "",
+  // deliveryFee: "",
   return (
     <TabsContent
       value="global"
@@ -33,32 +49,18 @@ const ProductInventoryGlobalDelivery = () => {
 
           <motion.div variants={itemVariants} className="space-y-4">
             <Label>Selected Countries</Label>
-            <div className="relative">
-              <Globe className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground/70" />
-              <Input
-                placeholder="Type country names..."
-                className="pl-10 bg-white dark:bg-black/20"
+            <div className="w-full px-10">
+              <MultipleSelector
+                value={countries}
+                onChange={handleAddCountries}
+                defaultOptions={COUNTRIES}
+                placeholder="Select frameworks you like..."
+                emptyIndicator={
+                  <p className="text-center text-base leading-10 text-gray-600 dark:text-gray-400">
+                    no results found.
+                  </p>
+                }
               />
-            </div>
-
-            <div className="flex flex-wrap gap-2 mt-2">
-              {[
-                "United States",
-                "Canada",
-                "United Kingdom",
-                "Germany",
-                "France",
-              ].map((country) => (
-                <span
-                  key={country}
-                  className="px-2 py-1 text-xs rounded-full bg-white dark:bg-black/20 border border-purple-200 dark:border-purple-700/40 text-purple-800 dark:text-purple-300 flex items-center"
-                >
-                  {country}
-                  <button className="ml-1 text-purple-500 hover:text-purple-700 dark:text-purple-400">
-                    ×
-                  </button>
-                </span>
-              ))}
             </div>
           </motion.div>
         </div>
@@ -70,7 +72,18 @@ const ProductInventoryGlobalDelivery = () => {
           <h3 className="text-sm font-medium mb-4">Local Delivery</h3>
           <div className="space-y-4">
             <div className="flex items-start space-x-2">
-              <Checkbox id="local-delivery" className="mt-1" defaultChecked />
+              <Checkbox
+                onCheckedChange={(checked) =>
+                  setValue("inventory.global.localDelivery.enabled", checked, {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  })
+                }
+                checked={isLocalDeliveryEnabled}
+                id="local-delivery"
+                className="mt-1"
+                defaultChecked
+              />
               <div>
                 <Label htmlFor="local-delivery" className="text-base">
                   Enable Local Delivery
@@ -83,20 +96,30 @@ const ProductInventoryGlobalDelivery = () => {
                 </p>
               </div>
             </div>
-
-            <div className="grid md:grid-cols-2 gap-4 mt-4">
-              <div className="space-y-2">
-                <Label className="text-xs">Delivery Radius (km)</Label>
-                <Input placeholder="50" className="bg-white dark:bg-black/20" />
+            {isLocalDeliveryEnabled && (
+              <div className="grid md:grid-cols-2 gap-4 mt-4">
+                <div className="space-y-2">
+                  <Label className="text-xs">Delivery Radius (km)</Label>
+                  <Input
+                    {...register(
+                      "inventory.global.localDelivery.deliveryRadius"
+                    )}
+                    type="number"
+                    placeholder="50"
+                    className="bg-white dark:bg-black/20"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs">Local Delivery Fee</Label>
+                  <Input
+                    {...register("inventory.global.localDelivery.deliveryFee")}
+                    type="number"
+                    placeholder="5.00"
+                    className="bg-white dark:bg-black/20"
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label className="text-xs">Local Delivery Fee</Label>
-                <Input
-                  placeholder="5.00"
-                  className="bg-white dark:bg-black/20"
-                />
-              </div>
-            </div>
+            )}
           </div>
         </motion.div>
       </motion.div>

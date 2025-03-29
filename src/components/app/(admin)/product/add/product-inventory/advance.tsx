@@ -14,8 +14,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useFormContext } from "react-hook-form";
 
 const ProductInventoryAdvance = () => {
+  const { watch, setValue, register } = useFormContext();
+  const idType = watch("inventory.advance.identification.idType");
+  const selectedSetting = watch("inventory.advance.inventorySettings");
+
+  const handleSelectSetting = (setting: string) => {
+    setValue(
+      "inventory.advance.inventorySettings",
+      selectedSetting === setting ? "" : setting
+    );
+  };
+
   return (
     <TabsContent
       value="advanced"
@@ -36,7 +48,12 @@ const ProductInventoryAdvance = () => {
           >
             <div className="space-y-4">
               <Label>Product ID Type</Label>
-              <Select>
+              <Select
+                value={idType}
+                onValueChange={(value) =>
+                  setValue("inventory.advance.identification.idType", value)
+                }
+              >
                 <SelectTrigger className="bg-white dark:bg-black/20">
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
@@ -53,6 +70,7 @@ const ProductInventoryAdvance = () => {
             <div className="space-y-4">
               <Label>Product ID</Label>
               <Input
+                {...register("inventory.advance.identification.productId")}
                 placeholder="Enter product ID"
                 className="bg-white dark:bg-black/20"
               />
@@ -67,43 +85,42 @@ const ProductInventoryAdvance = () => {
           <h3 className="text-sm font-medium mb-4">Inventory Settings</h3>
 
           <div className="space-y-4">
-            <div className="flex items-start space-x-2">
-              <Checkbox id="track-inventory" className="mt-1" defaultChecked />
-              <div>
-                <Label htmlFor="track-inventory">Track Inventory</Label>
-                <p className="text-xs text-muted-foreground">
-                  Automatically update stock levels when orders are placed
-                </p>
+            {[
+              {
+                id: "track-inventory",
+                name: "Track Inventory",
+                description:
+                  "Automatically update stock levels when orders are placed",
+              },
+              {
+                id: "allow-backorders",
+                name: "Allow Backorders",
+                description:
+                  "Allow customers to purchase products that are out of stock",
+              },
+              {
+                id: "sold-individually",
+                name: "Sold Individually",
+                description: "Limit purchases to one item per order",
+              },
+            ].map((setting) => (
+              <div key={setting.id} className="flex items-start space-x-2">
+                <Checkbox
+                  id={setting.id}
+                  checked={selectedSetting === setting.id}
+                  onCheckedChange={() => handleSelectSetting(setting.id)}
+                  className="mt-1"
+                />
+                <div>
+                  <Label htmlFor={setting.id}>{setting.name}</Label>
+                  <p className="text-xs text-muted-foreground">
+                    {setting.description}
+                  </p>
+                </div>
               </div>
-            </div>
-
-            <div className="flex items-start space-x-2">
-              <Checkbox id="allow-backorders" className="mt-1" />
-              <div>
-                <Label htmlFor="allow-backorders">Allow Backorders</Label>
-                <p className="text-xs text-muted-foreground">
-                  Allow customers to purchase products that are out of stock
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start space-x-2">
-              <Checkbox id="sold-individually" className="mt-1" />
-              <div>
-                <Label htmlFor="sold-individually">Sold Individually</Label>
-                <p className="text-xs text-muted-foreground">
-                  Limit purchases to one item per order
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </motion.div>
-
-        <div className="pt-4 flex justify-end">
-          <Button className="bg-primary text-white hover:bg-primary/90">
-            Save Settings
-          </Button>
-        </div>
       </motion.div>
     </TabsContent>
   );
