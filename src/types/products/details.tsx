@@ -74,7 +74,7 @@ export interface ProductData {
   };
   variations: {
     sizeOptions: string[];
-    colorVariants?: ColorVariant;
+    colorVariants?: ColorVariant[];
     materialType: string[];
     customizations: string;
   };
