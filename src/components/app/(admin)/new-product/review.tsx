@@ -110,10 +110,10 @@ export function ReviewForm({
                     </Badge>
                   )}
               </div>
-
+              {/* 
               <p className="text-gray-500 text-sm line-clamp-3 mb-3">
                 {values.basicInfo.productDescription}
-              </p>
+              </p> */}
 
               <div className="flex flex-wrap gap-1 mb-3">
                 {values.variations.colorVariants &&

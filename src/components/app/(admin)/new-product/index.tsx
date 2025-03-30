@@ -1,17 +1,6 @@
 "use client";
-import React, { useState } from "react";
-// import { ProductFormValues } from "@/lib/form-schema";
-// import { ProductAddStepper } from "@/components/product/ProductAddStepper";
-// import { BasicInfoForm } from "@/components/product/BasicInfoForm";
-// import { PricingForm } from "@/components/product/PricingForm";
-// import { InventoryForm } from "@/components/product/InventoryForm";
-// import { ShippingForm } from "@/components/product/ShippingForm";
-// import { ImagesForm } from "@/components/product/ImagesForm";
-// import { VariationsForm } from "@/components/product/VariationsForm";
-// import { SeoForm } from "@/components/product/SeoForm";
-// import { OtherInfoForm } from "@/components/product/OtherInfoForm";
-// import { ReviewForm } from "@/components/product/ReviewForm";
-// import { SuccessScreen } from "@/components/product/SuccessScreen";
+
+import React, { useEffect, useState } from "react";
 import { ProductFormValues } from "@/lib/schema/add-product";
 import { BasicInfoForm } from "./basic-info-form";
 import { useRouter } from "next/navigation";
@@ -25,6 +14,9 @@ import { SeoForm } from "./seo-from";
 import { OtherInfoForm } from "./other-info-from";
 import { ReviewForm } from "./review";
 import { SuccessScreen } from "./success-screen";
+import { initialValue } from "@/components/shared/rich-text-editor";
+import { useMultiStepForm } from "@/hooks/use-multistep-form";
+
 const steps = [
   "Basic Info",
   "Pricing",
@@ -37,75 +29,86 @@ const steps = [
   "Review",
 ];
 
+const LOCAL_STORAGE_KEY = "productFormData";
+
+const defaultFormData: ProductFormValues = {
+  basicInfo: {
+    productName: "",
+    productDescription: initialValue,
+    category: "",
+    subcategory: "",
+    brand: "",
+    sku: "",
+    productTags: [],
+  },
+  pricing: {
+    basePrice: 0,
+    discountedPrice: undefined,
+    discountPercentage: undefined,
+    taxRate: 0,
+    currency: "USD",
+  },
+  inventory: {
+    stockQuantity: 0,
+    stockStatus: "In Stock",
+    minOrderQuantity: 1,
+    maxOrderQuantity: 10,
+  },
+  shipping: {
+    weight: 0,
+    dimensions: {
+      length: 0,
+      width: 0,
+      height: 0,
+    },
+    shippingCost: 0,
+    estimatedDelivery: "",
+    returnPolicy: "",
+  },
+  images: {
+    productImages: [],
+    productVideos: [],
+    altTexts: [],
+  },
+  variations: {
+    sizeOptions: [],
+    colorVariants: [],
+    materialType: [],
+    customizations: "",
+  },
+  seo: {
+    metaTitle: "",
+    metaDescription: "",
+    slug: "",
+  },
+  otherInfo: {
+    isFeatured: false,
+    warrantyInfo: "",
+    supplierInfo: "",
+  },
+};
+
 const ProductAdd = () => {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState(0);
+
   const [isCompleted, setIsCompleted] = useState(false);
-  const [formData, setFormData] = useState<ProductFormValues>({
-    basicInfo: {
-      productName: "",
-      productDescription: "",
-      category: "",
-      subcategory: "",
-      brand: "",
-      sku: "",
-      productTags: [],
-    },
-    pricing: {
-      basePrice: 0,
-      discountedPrice: undefined,
-      discountPercentage: undefined,
-      taxRate: 0,
-      currency: "USD",
-    },
-    inventory: {
-      stockQuantity: 0,
-      stockStatus: "In Stock",
-      minOrderQuantity: 1,
-      maxOrderQuantity: 10,
-    },
-    shipping: {
-      weight: 0,
-      dimensions: {
-        length: 0,
-        width: 0,
-        height: 0,
-      },
-      shippingCost: 0,
-      estimatedDelivery: "",
-      returnPolicy: "",
-    },
-    images: {
-      productImages: [],
-      productVideos: [],
-      altTexts: [],
-    },
-    variations: {
-      sizeOptions: [],
-      colorVariants: [],
-      materialType: [],
-      customizations: "",
-    },
-    seo: {
-      metaTitle: "",
-      metaDescription: "",
-      slug: "",
-    },
-    otherInfo: {
-      isFeatured: false,
-      warrantyInfo: "",
-      supplierInfo: "",
-    },
-  });
+  const {
+    formData,
+    setFormData,
+    currentStep,
+    setCurrentStep,
+    nextStep,
+    prevStep,
+  } = useMultiStepForm(defaultFormData, LOCAL_STORAGE_KEY);
 
   const handleNext = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
+    nextStep();
   };
 
   const handleBack = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
+    prevStep();
   };
 
   const handleStepClick = (step: number) => {
@@ -156,67 +159,14 @@ const ProductAdd = () => {
   const handleFinalSubmit = () => {
     console.log("Final product data:", formData);
     setIsCompleted(true);
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
   };
 
   const handleAddAnother = () => {
     setCurrentStep(0);
     setIsCompleted(false);
-    setFormData({
-      basicInfo: {
-        productName: "",
-        productDescription: "",
-        category: "",
-        subcategory: "",
-        brand: "",
-        sku: "",
-        productTags: [],
-      },
-      pricing: {
-        basePrice: 0,
-        discountedPrice: undefined,
-        discountPercentage: undefined,
-        taxRate: 0,
-        currency: "USD",
-      },
-      inventory: {
-        stockQuantity: 0,
-        stockStatus: "In Stock",
-        minOrderQuantity: 1,
-        maxOrderQuantity: 10,
-      },
-      shipping: {
-        weight: 0,
-        dimensions: {
-          length: 0,
-          width: 0,
-          height: 0,
-        },
-        shippingCost: 0,
-        estimatedDelivery: "",
-        returnPolicy: "",
-      },
-      images: {
-        productImages: [],
-        productVideos: [],
-        altTexts: [],
-      },
-      variations: {
-        sizeOptions: [],
-        colorVariants: [],
-        materialType: [],
-        customizations: "",
-      },
-      seo: {
-        metaTitle: "",
-        metaDescription: "",
-        slug: "",
-      },
-      otherInfo: {
-        isFeatured: false,
-        warrantyInfo: "",
-        supplierInfo: "",
-      },
-    });
+    setFormData(defaultFormData);
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
   };
 
   const handleViewProducts = () => {
@@ -235,22 +185,15 @@ const ProductAdd = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Add New Product</h1>
-          <p className="text-gray-600 mt-2">
-            Fill in the details to add a new product to your inventory
-          </p>
-        </div>
-
+    <div className="flex-1 ">
+      <div className="w-full">
         <AddProductStepper
           steps={steps}
           currentStep={currentStep}
           onStepClick={handleStepClick}
         />
 
-        <div className="mt-8">
+        <div className="mt-16">
           {currentStep === 0 && (
             <BasicInfoForm
               defaultValues={formData.basicInfo}

@@ -1,11 +1,23 @@
 import { z } from "zod";
+const extractTextFromEditorState = (editorState: any): string => {
+  if (!editorState || !editorState.root || !editorState.root.children)
+    return "";
 
+  return editorState.root.children
+    .map((node: any) =>
+      node.children?.map((child: any) => child.text || "").join("")
+    )
+    .join(" ");
+};
 // Basic Information Schema
 export const basicInfoSchema = z.object({
   productName: z.string().min(3, "Product name must be at least 3 characters"),
   productDescription: z
-    .string()
-    .min(20, "Description must be at least 20 characters"),
+    .any() // Accept any serialized object
+    .refine(
+      (data) => extractTextFromEditorState(data).length >= 20,
+      "Description must be at least 20 characters"
+    ),
   category: z.string().min(1, "Please select a category"),
   subcategory: z.string().optional(),
   brand: z.string().min(1, "Brand is required"),

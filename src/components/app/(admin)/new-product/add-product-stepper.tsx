@@ -13,7 +13,7 @@ export function AddProductStepper({
   onStepClick,
 }: AddProductStepperProps) {
   return (
-    <div className="w-full max-w-3xl mx-auto my-8">
+    <div className="w-full  mx-auto my-8">
       <div className="relative flex items-center justify-between">
         {/* Progress bar */}
         <div className="absolute left-0 top-1/2 h-1 bg-gray-200 w-full -translate-y-1/2" />

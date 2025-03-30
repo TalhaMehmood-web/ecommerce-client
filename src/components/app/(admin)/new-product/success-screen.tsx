@@ -16,7 +16,7 @@ export function SuccessScreen({
   onViewProducts,
 }: SuccessScreenProps) {
   return (
-    <div className="w-full max-w-3xl mx-auto text-center py-12 animate-fade-in">
+    <div className="w-full  mx-auto text-center py-12 animate-fade-in">
       <div className="mb-6 animate-float">
         <CheckCircle className="h-20 w-20 text-green-500 mx-auto" />
       </div>

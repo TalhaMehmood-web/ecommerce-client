@@ -140,7 +140,7 @@ export function ImagesForm({
   };
 
   return (
-    <div className="w-full max-w-3xl p-6 mx-auto bg-white rounded-lg shadow-md animate-fade-in">
+    <div className="w-full  p-6 mx-auto bg-white rounded-lg shadow-md animate-fade-in">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Images & Media</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

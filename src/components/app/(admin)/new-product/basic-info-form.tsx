@@ -24,6 +24,9 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import RichTextEditor, {
+  initialValue,
+} from "@/components/shared/rich-text-editor";
 
 interface BasicInfoFormProps {
   defaultValues?: BasicInfoValues;
@@ -96,7 +99,7 @@ export function BasicInfoForm({ defaultValues, onSubmit }: BasicInfoFormProps) {
     resolver: zodResolver(basicInfoSchema),
     defaultValues: defaultValues || {
       productName: "",
-      productDescription: "",
+      productDescription: initialValue,
       category: "",
       subcategory: "",
       brand: "",
@@ -104,7 +107,7 @@ export function BasicInfoForm({ defaultValues, onSubmit }: BasicInfoFormProps) {
       productTags: [],
     },
   });
-
+  console.log("defaultValues", defaultValues);
   const [tag, setTag] = React.useState("");
   const [selectedCategory, setSelectedCategory] = React.useState<string | null>(
     null
@@ -125,7 +128,7 @@ export function BasicInfoForm({ defaultValues, onSubmit }: BasicInfoFormProps) {
   };
 
   return (
-    <div className="w-full max-w-3xl p-6 mx-auto bg-white rounded-lg shadow-md animate-fade-in">
+    <div className="w-full  p-6 mx-auto bg-white rounded-lg shadow-md animate-fade-in">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">
         Basic Information
       </h2>
@@ -167,11 +170,7 @@ export function BasicInfoForm({ defaultValues, onSubmit }: BasicInfoFormProps) {
               <FormItem>
                 <FormLabel>Product Description</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="Enter detailed product description"
-                    className="min-h-32"
-                    {...field}
-                  />
+                  <RichTextEditor {...field} editorKey="productDescription" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

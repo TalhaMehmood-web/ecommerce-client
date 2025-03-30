@@ -49,7 +49,7 @@ export function ShippingForm({
   });
 
   return (
-    <div className="w-full max-w-3xl p-6 mx-auto bg-white rounded-lg shadow-md animate-fade-in">
+    <div className="w-full  p-6 mx-auto bg-white rounded-lg shadow-md animate-fade-in">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">
         Shipping & Delivery
       </h2>
