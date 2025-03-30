@@ -1,15 +1,22 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { motion } from "framer-motion";
 import { ImagePreview } from "./image-preview";
 import { UploadIcon } from "./upload-icon";
-
+import { useFormContext } from "react-hook-form";
+import { toast } from "sonner";
+const MAX_IMAGES = 5;
 const ImageUploader: React.FC = () => {
   const [images, setImages] = useState<{ id: string; url: string }[]>([]);
-
+  const { setValue, getValues } = useFormContext();
   // Handle file upload
   const onDrop = (acceptedFiles: File[]) => {
+    if (images.length + acceptedFiles.length > MAX_IMAGES) {
+      toast.error(`You can only upload up to ${MAX_IMAGES} images.`);
+      return;
+    }
+
     const newImages = acceptedFiles.map((file) => ({
       id: URL.createObjectURL(file),
       url: URL.createObjectURL(file),
@@ -29,6 +36,13 @@ const ImageUploader: React.FC = () => {
     onDrop,
     multiple: true,
   });
+
+  useEffect(() => {
+    setValue(
+      "images",
+      images.map((image) => image.url)
+    );
+  }, [images, setValue]);
 
   return (
     <div className="flex flex-col items-center bg-gray-50 rounded-2xl  w-full ">
@@ -50,7 +64,9 @@ const ImageUploader: React.FC = () => {
         <input {...getInputProps()} />
         <UploadIcon />
         <p className="text-gray-500 text-sm mt-2">
-          Drag & drop or click to upload
+          {images.length >= MAX_IMAGES
+            ? "Maximum images reached"
+            : "Drag & drop or click to upload"}
         </p>
       </div>
     </div>

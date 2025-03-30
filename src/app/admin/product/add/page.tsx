@@ -1,3 +1,4 @@
+import ProductAdd from "@/components/app/(admin)/new-product";
 import AddProductView from "@/components/app/(admin)/product/add";
 import PageWrapper from "@/components/shared/page-wrapper";
 import { PageBreadCrumb } from "@/components/shared/page-wrapper/breadcrumb";
@@ -14,8 +15,7 @@ const AddProductPage = () => {
         ]}
       />
       <PageTitle title="Add Product" />
-
-      <AddProductView />
+      <ProductAdd />;
     </PageWrapper>
   );
 };
