@@ -13,14 +13,14 @@ interface Column<T> {
   render?: (item: T) => React.ReactNode;
 }
 
-interface TableBodyProps<T extends { id: string | number }> {
+interface TableBodyProps<T extends { _id: string | number }> {
   data: T[];
   columns: Column<T>[];
   isLoading: boolean;
   isError: boolean;
 }
 
-export default function TableBody<T extends { id: string | number }>({
+export default function TableBody<T extends { _id: string | number }>({
   data,
   columns,
   isLoading,
@@ -55,7 +55,7 @@ export default function TableBody<T extends { id: string | number }>({
     <ShadTableBody>
       {data.map((item, index) => (
         <motion.tr
-          key={item.id || index}
+          key={item._id || index}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}

@@ -4,14 +4,14 @@ import TableBody from "./table-body";
 import TableContainer from "./table-container";
 import TablePagination from "./table-pagination";
 
-interface Column<T extends { id: string | number }> {
+interface Column<T extends { _id: string | number }> {
   key: keyof T;
   label: string;
   minWidth?: string;
   render?: (item: T) => React.ReactNode;
 }
 
-interface DataTableProps<T extends { id: string | number }> {
+interface DataTableProps<T extends { _id: string | number }> {
   columns: Column<T>[];
   data: T[];
   isLoading: boolean;
@@ -24,7 +24,7 @@ interface DataTableProps<T extends { id: string | number }> {
   onPageSizeChange: (size: number) => void;
 }
 
-export default function DataTable<T extends { id: string | number }>({
+export default function DataTable<T extends { _id: string | number }>({
   columns,
   data,
   isLoading,
