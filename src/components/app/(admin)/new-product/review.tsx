@@ -20,7 +20,13 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 interface ReviewFormProps {
   values: ProductFormValues;
   onSubmit: () => void;
@@ -69,26 +75,38 @@ export function ReviewForm({
                 How your product might appear to customers
               </CardDescription>
             </CardHeader>
-            <CardContent className="pt-4">
+
+            <CardContent className="">
               {values.images.productImages.length > 0 && (
                 <div className="relative mb-4 rounded-md overflow-hidden">
-                  <AspectRatio ratio={1}>
-                    <img
-                      src={values.images.productImages[0]}
-                      alt={
-                        values.images.altTexts?.[0] ||
-                        values.basicInfo.productName
-                      }
-                      className="object-cover w-full h-full"
-                    />
-                  </AspectRatio>
+                  <Carousel>
+                    <CarouselContent>
+                      {values.images.productImages.map((image, index) => (
+                        <CarouselItem key={index}>
+                          <AspectRatio ratio={1}>
+                            <img
+                              src={image}
+                              alt={
+                                values.images.altTexts?.[index] ||
+                                values.basicInfo.productName
+                              }
+                              className="object-cover w-full h-full rounded-md"
+                            />
+                          </AspectRatio>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="left-1 bg-slate-800 text-white" />
+                    <CarouselNext className="right-1 bg-slate-800 text-white" />
+                  </Carousel>
                   {values.images.productImages.length > 1 && (
                     <div className="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded-md">
-                      +{values.images.productImages.length - 1} more
+                      {values.images.productImages.length} images
                     </div>
                   )}
                 </div>
               )}
+
               <h3 className="font-bold text-lg">
                 {values.basicInfo.productName}
               </h3>
@@ -110,10 +128,6 @@ export function ReviewForm({
                     </Badge>
                   )}
               </div>
-              {/* 
-              <p className="text-gray-500 text-sm line-clamp-3 mb-3">
-                {values.basicInfo.productDescription}
-              </p> */}
 
               <div className="flex flex-wrap gap-1 mb-3">
                 {values.variations.colorVariants &&

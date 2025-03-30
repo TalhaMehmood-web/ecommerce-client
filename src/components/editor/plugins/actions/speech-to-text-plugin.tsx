@@ -123,6 +123,7 @@ function SpeechToTextPluginImpl() {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
+          type="button"
           onClick={() => {
             editor.dispatchCommand(SPEECH_TO_TEXT_COMMAND, !isSpeechToText);
             setIsSpeechToText(!isSpeechToText);
