@@ -8,7 +8,7 @@ interface User {
   role: string;
 }
 
-interface ApiResponse<T> {
+export interface ApiResponse<T> {
   statusCode?: number;
   message: string;
   data?: T;
@@ -31,8 +31,12 @@ type RegisterResponse = ApiResponse<{ user: User }>;
 type LoginResponse = ApiResponse<{ accessToken: string; user: User }>;
 
 // ✅ Generic API Request Function
-const apiRequest = async <T>(endpoint: string, data: unknown): Promise<T> => {
+export const apiRequest = async <T>(
+  endpoint: string,
+  data: unknown
+): Promise<T> => {
   const response = await axiosInstance.post<T>(endpoint, data);
+  console.log("res", response);
   return response.data;
 };
 

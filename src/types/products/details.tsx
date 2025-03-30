@@ -9,6 +9,8 @@ export interface ProductDescription {
         text: string;
         type: string;
         version: number;
+        textFormat?: number; // Make it optional
+        textStyle?: string; // Make it optional
       }>;
       direction: string;
       format: string;
@@ -34,7 +36,7 @@ export interface ColorVariant {
 export interface ProductData {
   basicInfo: {
     productName: string;
-    productDescription: ProductDescription;
+    productDescription?: ProductDescription;
     category: string;
     subcategory: string;
     brand: string;
@@ -45,6 +47,8 @@ export interface ProductData {
     basePrice: number;
     taxRate: number;
     currency: string;
+    discountedPrice?: any;
+    discountPercentage?: any;
   };
   inventory: {
     stockQuantity: number;
@@ -70,7 +74,7 @@ export interface ProductData {
   };
   variations: {
     sizeOptions: string[];
-    colorVariants: ColorVariant[];
+    colorVariants?: ColorVariant;
     materialType: string[];
     customizations: string;
   };

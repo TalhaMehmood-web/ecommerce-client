@@ -16,6 +16,8 @@ import { ReviewForm } from "./review";
 import { SuccessScreen } from "./success-screen";
 import { initialValue } from "@/components/shared/rich-text-editor";
 import { useMultiStepForm } from "@/hooks/product/add/use-multistep-form";
+import { useAddProduct } from "@/hooks/product/add/use-addproduct-mutation";
+import { ProductData } from "@/types/products/details";
 
 const steps = [
   "Basic Info",
@@ -100,7 +102,7 @@ const ProductAdd = () => {
     nextStep,
     prevStep,
   } = useMultiStepForm(defaultFormData, LOCAL_STORAGE_KEY);
-
+  const mutation = useAddProduct();
   const handleNext = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     nextStep();
@@ -169,10 +171,16 @@ const ProductAdd = () => {
   };
 
   const handleFinalSubmit = () => {
-    console.log("Final product data:", formData);
-    markStepAsCompleted(8);
-    setIsCompleted(true);
-    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    mutation
+      .mutateAsync(formData as ProductData)
+      .then((res) => {
+        console.log("response", res);
+        markStepAsCompleted(8);
+        setIsCompleted(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleAddAnother = () => {
@@ -184,8 +192,7 @@ const ProductAdd = () => {
   };
 
   const handleViewProducts = () => {
-    // In a real app, router to products list
-    router.push("/");
+    router.push("/admin/product/list");
   };
 
   if (isCompleted) {

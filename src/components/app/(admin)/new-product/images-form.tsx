@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useCallback, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -9,6 +10,9 @@ import { Upload, X } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useDropzone } from "react-dropzone";
 import { motion } from "framer-motion";
+import { useMutation } from "@tanstack/react-query";
+import axiosInstance from "@/config/axios";
+import { toast } from "sonner";
 
 interface ImagesFormProps {
   defaultValues?: ImagesValues;
@@ -31,8 +35,6 @@ export function ImagesForm({
       altTexts: [],
     },
   });
-
-  // Load default images from defaultValues.productImages
   useEffect(() => {
     const storedImages = defaultValues?.productImages || [];
     const storedAltTexts = defaultValues?.altTexts || [];
@@ -41,46 +43,59 @@ export function ImagesForm({
     form.setValue("altTexts", storedAltTexts);
   }, [defaultValues, form]);
 
-  // Convert file to Base64
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
-  };
+  // File Upload Mutation
+  const uploadMutation = useMutation({
+    mutationFn: async (files: File[]) => {
+      const formData = new FormData();
+      files.forEach((file) => formData.append("files", file));
+
+      const response = await axiosInstance.post("upload/multiple", formData);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      if (data?.data) {
+        const uploadedImages = data.data; // Extract URLs
+        const newAltTexts = Array(uploadedImages.length).fill("");
+
+        form.setValue("productImages", uploadedImages);
+        form.setValue("altTexts", newAltTexts);
+      }
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Failed to upload images");
+    },
+  });
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
+      const currentImages = form.getValues().productImages;
+
+      if (currentImages.length + acceptedFiles.length > 5) {
+        return toast.error("You can upload up to 5 images only.");
+      }
+
+      const totalSize = acceptedFiles.reduce((acc, file) => acc + file.size, 0);
+      if (totalSize > 5 * 1024 * 1024) {
+        return toast.error("Total file size should not exceed 5MB.");
+      }
+
       setIsUploading(true);
-
-      const newImages = [...form.getValues().productImages];
-      const newAltTexts = [...(form.getValues().altTexts || [])];
-
-      const base64Images = await Promise.all(acceptedFiles.map(fileToBase64));
-
-      base64Images.forEach((imageUrl) => {
-        newImages.push(imageUrl);
-        newAltTexts.push("");
+      await toast.promise(uploadMutation.mutateAsync(acceptedFiles), {
+        loading: "Uploading images...",
+        success: "Images uploaded successfully!",
+        error: (error: any) =>
+          error?.response?.data?.message || "Failed to upload images.",
       });
-
-      form.setValue("productImages", newImages);
-      form.setValue("altTexts", newAltTexts);
-
-      // Store in localStorage
-      localStorage.setItem("productImages", JSON.stringify(newImages));
-      localStorage.setItem("altTexts", JSON.stringify(newAltTexts));
 
       setIsUploading(false);
     },
-    [form]
+    [uploadMutation, form]
   );
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: { "image/*": [".jpeg", ".jpg", ".png", ".webp"] },
-    maxSize: 5242880,
+    maxSize: 5 * 1024 * 1024,
   });
 
   const handleRemoveImage = (index: number) => {
@@ -92,10 +107,6 @@ export function ImagesForm({
 
     form.setValue("productImages", newImages);
     form.setValue("altTexts", newAltTexts);
-
-    // Update localStorage
-    localStorage.setItem("productImages", JSON.stringify(newImages));
-    localStorage.setItem("altTexts", JSON.stringify(newAltTexts));
   };
 
   return (
@@ -110,7 +121,7 @@ export function ImagesForm({
             <input {...getInputProps()} />
             <Upload className="h-12 w-12 mx-auto text-gray-400 mb-2" />
             <p className="text-sm">
-              Drag and drop your images here or click to upload
+              Drag and drop up to 5 images (Max 5MB total) or click to upload
             </p>
           </div>
 
@@ -129,7 +140,7 @@ export function ImagesForm({
                     <img
                       src={image}
                       alt={
-                        form?.watch("altTexts")?.[index] ||
+                        form.watch("altTexts")?.[index] ||
                         `Product image ${index + 1}`
                       }
                       className="object-cover w-full h-full rounded-md"
@@ -153,10 +164,6 @@ export function ImagesForm({
                       ];
                       newAltTexts[index] = e.target.value;
                       form.setValue("altTexts", newAltTexts);
-                      localStorage.setItem(
-                        "altTexts",
-                        JSON.stringify(newAltTexts)
-                      );
                     }}
                     className="text-xs p-1 w-full mt-1"
                   />
