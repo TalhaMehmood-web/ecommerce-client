@@ -28,7 +28,7 @@ export function AddProductStepper({
         {steps.map((step, index) => {
           const isCompleted = completedSteps.includes(index);
           const isCurrent = index === currentStep;
-          const isClickable = index <= currentStep;
+          const isClickable = index <= currentStep || isCompleted;
 
           return (
             <div
