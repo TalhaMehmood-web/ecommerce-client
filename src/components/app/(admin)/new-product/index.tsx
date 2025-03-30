@@ -15,7 +15,7 @@ import { OtherInfoForm } from "./other-info-from";
 import { ReviewForm } from "./review";
 import { SuccessScreen } from "./success-screen";
 import { initialValue } from "@/components/shared/rich-text-editor";
-import { useMultiStepForm } from "@/hooks/use-multistep-form";
+import { useMultiStepForm } from "@/hooks/product/add/use-multistep-form";
 
 const steps = [
   "Basic Info",
@@ -90,8 +90,8 @@ const defaultFormData: ProductFormValues = {
 
 const ProductAdd = () => {
   const router = useRouter();
-
   const [isCompleted, setIsCompleted] = useState(false);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const {
     formData,
     setFormData,
@@ -105,7 +105,11 @@ const ProductAdd = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     nextStep();
   };
-
+  const markStepAsCompleted = (step: number) => {
+    if (!completedSteps.includes(step)) {
+      setCompletedSteps((prev) => [...prev, step]);
+    }
+  };
   const handleBack = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     prevStep();
@@ -118,52 +122,62 @@ const ProductAdd = () => {
 
   const handleBasicInfoSubmit = (values: any) => {
     setFormData((prev) => ({ ...prev, basicInfo: values }));
+    markStepAsCompleted(0);
     handleNext();
   };
 
   const handlePricingSubmit = (values: any) => {
     setFormData((prev) => ({ ...prev, pricing: values }));
+    markStepAsCompleted(1);
     handleNext();
   };
 
   const handleInventorySubmit = (values: any) => {
     setFormData((prev) => ({ ...prev, inventory: values }));
+    markStepAsCompleted(2);
     handleNext();
   };
 
   const handleShippingSubmit = (values: any) => {
     setFormData((prev) => ({ ...prev, shipping: values }));
+    markStepAsCompleted(3);
     handleNext();
   };
 
   const handleImagesSubmit = (values: any) => {
     setFormData((prev) => ({ ...prev, images: values }));
+    markStepAsCompleted(4);
     handleNext();
   };
 
   const handleVariationsSubmit = (values: any) => {
     setFormData((prev) => ({ ...prev, variations: values }));
+    markStepAsCompleted(5);
     handleNext();
   };
 
   const handleSeoSubmit = (values: any) => {
     setFormData((prev) => ({ ...prev, seo: values }));
+    markStepAsCompleted(6);
     handleNext();
   };
 
   const handleOtherInfoSubmit = (values: any) => {
     setFormData((prev) => ({ ...prev, otherInfo: values }));
+    markStepAsCompleted(7);
     handleNext();
   };
 
   const handleFinalSubmit = () => {
     console.log("Final product data:", formData);
+    markStepAsCompleted(8);
     setIsCompleted(true);
     localStorage.removeItem(LOCAL_STORAGE_KEY);
   };
 
   const handleAddAnother = () => {
     setCurrentStep(0);
+    setCompletedSteps([]);
     setIsCompleted(false);
     setFormData(defaultFormData);
     localStorage.removeItem(LOCAL_STORAGE_KEY);
@@ -189,6 +203,7 @@ const ProductAdd = () => {
       <div className="w-full">
         <AddProductStepper
           steps={steps}
+          completedSteps={completedSteps}
           currentStep={currentStep}
           onStepClick={handleStepClick}
         />
