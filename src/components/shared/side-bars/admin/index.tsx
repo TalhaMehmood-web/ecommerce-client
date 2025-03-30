@@ -46,6 +46,13 @@ const orderItems: SidebarItemProps[] = [
     icon: "Inbox",
   },
 ];
+const newProductItems: SidebarItemProps[] = [
+  {
+    title: "Create",
+    url: "/admin/new-product/add",
+    icon: "Home",
+  },
+];
 export default function AdminSidebar() {
   return (
     <Sidebar collapsible="icon" variant="floating">
@@ -59,6 +66,10 @@ export default function AdminSidebar() {
           </SidebarMenuButton>
         </SidebarMenuItem>
         <SidebarCollapsible title="Manage Products" items={productItems} />
+        <SidebarCollapsible
+          title="Manage New Products"
+          items={newProductItems}
+        />
         <SidebarCollapsible title="Manage Customers" items={customerItems} />
         <SidebarCollapsible title="Manage Orders" items={orderItems} />
       </SidebarContent>

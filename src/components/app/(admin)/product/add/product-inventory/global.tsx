@@ -12,7 +12,7 @@ import { useFormContext } from "react-hook-form";
 
 const ProductInventoryGlobalDelivery = () => {
   const { watch, setValue, register } = useFormContext();
-  const { countries } = watch("inventory.global.countries");
+  const countries = watch("inventory.global.countries");
   const isLocalDeliveryEnabled = watch(
     "inventory.global.localDelivery.enabled"
   );
@@ -22,8 +22,7 @@ const ProductInventoryGlobalDelivery = () => {
       shouldDirty: true,
     });
   };
-  // deliveryRadius: "",
-  // deliveryFee: "",
+
   return (
     <TabsContent
       value="global"
@@ -54,7 +53,7 @@ const ProductInventoryGlobalDelivery = () => {
                 value={countries}
                 onChange={handleAddCountries}
                 defaultOptions={COUNTRIES}
-                placeholder="Select frameworks you like..."
+                placeholder="Select Countries"
                 emptyIndicator={
                   <p className="text-center text-base leading-10 text-gray-600 dark:text-gray-400">
                     no results found.
