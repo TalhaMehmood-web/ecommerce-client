@@ -1,5 +1,6 @@
 import ProductAdd from "@/components/app/(admin)/product/add";
 import EditProductView from "@/components/app/(admin)/product/edit";
+import PageLoader from "@/components/shared/loading/page-loader";
 import PageWrapper from "@/components/shared/page-wrapper";
 import { PageBreadCrumb } from "@/components/shared/page-wrapper/breadcrumb";
 import PageTitle from "@/components/shared/page-wrapper/page-title";
@@ -14,7 +15,7 @@ const EditProductPage = async ({
   const { id } = await params;
 
   return (
-    <Suspense fallback={<p>Loading</p>}>
+    <Suspense fallback={<PageLoader className="min-h-screen " />}>
       <PageWrapper className="flex flex-col gap-1.5">
         <PageBreadCrumb
           items={[
