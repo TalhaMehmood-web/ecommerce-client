@@ -35,9 +35,11 @@ const LOCAL_STORAGE_KEY = "productFormData";
 const ProductAdd = ({
   defaultFormData,
   editMode,
+  id,
 }: {
   defaultFormData: ProductFormValues;
   editMode?: boolean;
+  id?: string;
 }) => {
   const router = useRouter();
   const [isCompleted, setIsCompleted] = useState(false);
@@ -50,7 +52,7 @@ const ProductAdd = ({
     nextStep,
     prevStep,
   } = useMultiStepForm(defaultFormData, LOCAL_STORAGE_KEY, editMode);
-  const mutation = useAddProduct(editMode);
+  const mutation = useAddProduct(editMode, id);
 
   const handleNext = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -96,6 +98,7 @@ const ProductAdd = ({
     setIsCompleted(false);
     setFormData(defaultFormData);
     localStorage.removeItem(LOCAL_STORAGE_KEY);
+    router.push("/admin/product/add");
   };
 
   const handleViewProducts = () => {

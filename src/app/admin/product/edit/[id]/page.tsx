@@ -1,4 +1,5 @@
 import ProductAdd from "@/components/app/(admin)/product/add";
+import EditProductView from "@/components/app/(admin)/product/edit";
 import PageWrapper from "@/components/shared/page-wrapper";
 import { PageBreadCrumb } from "@/components/shared/page-wrapper/breadcrumb";
 import PageTitle from "@/components/shared/page-wrapper/page-title";
@@ -11,9 +12,6 @@ const EditProductPage = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
-  const response = await fetch(`${API_BASE_URL}/api/v1/product/${id}`);
-  const data = await response.json();
-  const product = data.data;
 
   return (
     <Suspense fallback={<p>Loading</p>}>
@@ -25,7 +23,7 @@ const EditProductPage = async ({
           ]}
         />
         <PageTitle title="Edit Product" />
-        <ProductAdd editMode defaultFormData={product} />;
+        <EditProductView id={id} />
       </PageWrapper>
     </Suspense>
   );

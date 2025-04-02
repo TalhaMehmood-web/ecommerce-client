@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { ProductFormValues } from "@/lib/schema/add-product";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,12 +9,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Check, ChevronRight, ChevronLeft } from "lucide-react";
-import { toast } from "sonner";
+
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -42,18 +41,8 @@ export function ReviewForm({
   onEdit,
   editMode,
 }: ReviewFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleSubmit = () => {
-    setIsSubmitting(true);
-
-    setTimeout(() => {
-      toast.success("Product successfully added!", {
-        description: "Your product has been created and is now live.",
-      });
-      setIsSubmitting(false);
-      onSubmit();
-    }, 1500);
+    onSubmit();
   };
 
   return (
@@ -591,16 +580,9 @@ export function ReviewForm({
           type="button"
           onClick={handleSubmit}
           className="flex items-center animate-float"
-          disabled={isSubmitting}
         >
-          {isSubmitting ? (
-            "Submitting..."
-          ) : (
-            <>
-              {editMode ? "Edit" : "Add"} Product
-              <ChevronRight className="h-4 w-4 ml-1" />
-            </>
-          )}
+          {editMode ? "Edit" : "Add"} Product
+          <ChevronRight className="h-4 w-4 ml-1" />
         </Button>
       </div>
     </div>
