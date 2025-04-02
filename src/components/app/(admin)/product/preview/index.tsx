@@ -1,32 +1,42 @@
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
-
-import { ProductData } from "@/types/products/details";
 import ProductGallery from "./gallery";
 import ProductInfo from "./info";
 import ProductTabs from "./details-tabs";
 import RelatedProducts from "./related-products";
-
-const ProductDetails: React.FC<{ product: ProductData }> = ({ product }) => {
-  const pageVariants = {
-    initial: { opacity: 0 },
-    animate: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1,
-      },
+import PageLoader from "@/components/shared/loading/page-loader";
+import ErrorWrapper from "@/components/shared/errors";
+import { useFetchProductById } from "@/hooks/product/get-by-id";
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.1,
     },
-  };
+  },
+};
 
-  const sectionVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 },
-    },
-  };
+const sectionVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6 },
+  },
+};
+const ProductDetails = ({ id }: { id: string }) => {
+  const { data, isLoading, isError } = useFetchProductById(id);
+  const product = data?.data;
+  if (isLoading) {
+    return <PageLoader />;
+  }
+
+  if (isError) {
+    return <ErrorWrapper message="Error loading product data." />;
+  }
 
   return (
     <motion.div

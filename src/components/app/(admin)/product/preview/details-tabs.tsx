@@ -42,9 +42,11 @@ const ProductTabs: React.FC<ProductTabsProps> = ({ product }) => {
   };
 
   return (
-    <Tabs defaultValue="description" className="w-full">
-      <TabsList className="grid grid-cols-3 mb-8">
-        <TabsTrigger value="description">Description</TabsTrigger>
+    <Tabs defaultValue="description" className="w-full bg-none">
+      <TabsList className="grid grid-cols-3 mb-8 bg-none">
+        <TabsTrigger className="bg-none" value="description">
+          Description
+        </TabsTrigger>
         <TabsTrigger value="specifications">Specifications</TabsTrigger>
         <TabsTrigger value="shipping">Shipping & Returns</TabsTrigger>
       </TabsList>

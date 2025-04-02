@@ -31,9 +31,11 @@ const ProductListRowOptions: React.FC<ProductListRowOptionsProps> = ({
               <Edit /> Edit
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>
-            <Eye /> Preview
-          </DropdownMenuItem>
+          <Link href={`/admin/product/preview/${product.id}`}>
+            <DropdownMenuItem>
+              <Eye /> Preview
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuItem>
             <Trash2Icon /> Delete
           </DropdownMenuItem>

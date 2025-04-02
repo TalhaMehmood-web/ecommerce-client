@@ -5,23 +5,11 @@ import axiosInstance from "@/config/axios";
 import ProductAdd from "../add";
 import PageLoader from "@/components/shared/loading/page-loader";
 import ErrorWrapper from "@/components/shared/errors";
-
-const fetchProductById = async (id: string) => {
-  const response = await axiosInstance.get(`/product/${id}`);
-  return response.data;
-};
+import { useFetchProductById } from "@/hooks/product/get-by-id";
 
 const EditProductView = ({ id }: { id: string }) => {
-  const {
-    data: productData,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["product", id],
-    queryFn: () => fetchProductById(id),
-    enabled: !!id,
-  });
-
+  const { data, isLoading, isError } = useFetchProductById(id);
+  const product = data?.data;
   if (isLoading) {
     return <PageLoader />;
   }
@@ -30,7 +18,7 @@ const EditProductView = ({ id }: { id: string }) => {
     return <ErrorWrapper message="Error loading product data." />;
   }
 
-  return <ProductAdd id={id} defaultFormData={productData?.data} editMode />;
+  return <ProductAdd id={id} defaultFormData={product} editMode />;
 };
 
 export default EditProductView;

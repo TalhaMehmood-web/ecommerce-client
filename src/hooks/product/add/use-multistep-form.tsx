@@ -58,9 +58,11 @@ export function useMultiStepForm<T>(
 
   // Save step to localStorage & update query params
   useEffect(() => {
-    if (typeof window !== "undefined" && !editMode) {
-      localStorage.setItem(LOCAL_STORAGE_STEP_KEY, currentStep.toString());
+    if (typeof window !== "undefined") {
       router.replace(`${pathname}?step=${currentStep}`);
+      if (!editMode) {
+        localStorage.setItem(LOCAL_STORAGE_STEP_KEY, currentStep.toString());
+      }
     }
   }, [currentStep, pathname, router]);
 

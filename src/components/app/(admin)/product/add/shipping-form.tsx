@@ -105,7 +105,12 @@ export function ShippingForm({
             />
           </div>
 
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion
+            defaultValue="dimensions"
+            type="single"
+            collapsible
+            className="w-full"
+          >
             <AccordionItem value="dimensions">
               <AccordionTrigger className="text-sm font-medium">
                 Product Dimensions (Optional)
