@@ -26,6 +26,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { CompanyFormData } from "@/types/verify";
 interface ReviewFormProps {
   values: ProductFormValues;
   onSubmit: () => void;

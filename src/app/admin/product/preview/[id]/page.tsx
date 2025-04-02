@@ -14,7 +14,7 @@ const EditProductPage = async ({
   const { id } = await params;
 
   return (
-    <Suspense fallback={<PageLoader />}>
+    <Suspense fallback={<PageLoader className="min-h-screen" />}>
       <PageWrapper className="flex flex-col gap-1.5">
         <PageBreadCrumb
           items={[

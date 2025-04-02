@@ -15,7 +15,7 @@ const navItems = [
   { label: "Checkout", path: "/checkout" },
   { label: "Wishlist", path: "/wishlist" },
   { label: "Shipping Info", path: "/shipping-info" },
-  { label: "Be a Vendor", path: "/billing" },
+  { label: "Be a Vendor", path: "/company" },
 ];
 
 const ClientNavbar = () => {
