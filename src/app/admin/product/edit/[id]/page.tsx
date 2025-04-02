@@ -5,7 +5,11 @@ import PageTitle from "@/components/shared/page-wrapper/page-title";
 import { API_BASE_URL } from "@/lib/app";
 import React, { Suspense } from "react";
 
-const EditProductPage = async ({ params }: { params: { id: string } }) => {
+const EditProductPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
   const { id } = await params;
   const response = await fetch(`${API_BASE_URL}/api/v1/product/${id}`);
   const data = await response.json();
