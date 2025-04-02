@@ -1,18 +1,19 @@
+import React from "react";
+import {
+  useReactTable,
+  ColumnDef,
+  getCoreRowModel,
+  getPaginationRowModel,
+} from "@tanstack/react-table";
 import { Table } from "@/components/ui/table";
-import TableHeader from "./table-header";
-import TableBody from "./table-body";
 import TableContainer from "./table-container";
 import TablePagination from "./table-pagination";
 
-interface Column<T extends { _id: string | number }> {
-  key: keyof T;
-  label: string;
-  minWidth?: string;
-  render?: (item: T) => React.ReactNode;
-}
+import TableHeader from "./table-header";
+import TableBody from "./table-body";
 
-interface DataTableProps<T extends { _id: string | number }> {
-  columns: Column<T>[];
+interface DataTableProps<T> {
+  columns: ColumnDef<T, any>[];
   data: T[];
   isLoading: boolean;
   isError: boolean;
@@ -24,7 +25,7 @@ interface DataTableProps<T extends { _id: string | number }> {
   onPageSizeChange: (size: number) => void;
 }
 
-export default function DataTable<T extends { _id: string | number }>({
+export default function DataTable<T>({
   columns,
   data,
   isLoading,
@@ -36,15 +37,25 @@ export default function DataTable<T extends { _id: string | number }>({
   onPageChange,
   onPageSizeChange,
 }: DataTableProps<T>) {
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    pageCount: totalPages,
+  });
+
   return (
     <TableContainer>
       <Table>
-        <TableHeader columns={columns} />
+        <TableHeader headerGroups={table.getHeaderGroups()} />
         <TableBody
-          data={data}
-          columns={columns}
+          rows={table.getRowModel().rows}
+          columnsLength={columns.length}
           isLoading={isLoading}
           isError={isError}
+          hasData={data.length > 0}
         />
       </Table>
       <TablePagination

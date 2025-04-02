@@ -52,7 +52,7 @@ export interface ProductData {
   };
   inventory: {
     stockQuantity: number;
-    stockStatus: string;
+    stockStatus: "In Stock" | "Out of Stock" | "Low Stock";
     minOrderQuantity: number;
     maxOrderQuantity: number;
   };

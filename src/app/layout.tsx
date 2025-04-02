@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${nunitoSans.variable} antialiased`}
       >
         <QueryProvider>{children}</QueryProvider>
-        <Toaster position="top-right" />
+        <Toaster position="top-right" richColors theme="light" />
       </body>
     </html>
   );

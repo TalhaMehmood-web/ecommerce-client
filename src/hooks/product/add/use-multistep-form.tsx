@@ -12,7 +12,11 @@ const steps = [
   "Other Info",
   "Review",
 ];
-export function useMultiStepForm<T>(defaultData: T, storageKey: string) {
+export function useMultiStepForm<T>(
+  defaultData: T,
+  storageKey: string,
+  editMode?: boolean
+) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -21,7 +25,7 @@ export function useMultiStepForm<T>(defaultData: T, storageKey: string) {
 
   // Load form data from localStorage or use defaultData
   const [formData, setFormData] = useState<T>(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && !editMode) {
       const savedData = localStorage.getItem(storageKey);
       return savedData ? JSON.parse(savedData) : defaultData;
     }
@@ -30,7 +34,7 @@ export function useMultiStepForm<T>(defaultData: T, storageKey: string) {
 
   // Load step from localStorage or query param
   const [currentStep, setCurrentStep] = useState<number>(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && !editMode) {
       const savedStep = localStorage.getItem(LOCAL_STORAGE_STEP_KEY);
       return savedStep ? parseInt(savedStep, 10) : 1;
     }
@@ -47,14 +51,14 @@ export function useMultiStepForm<T>(defaultData: T, storageKey: string) {
 
   // Save formData to localStorage whenever it changes
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && !editMode) {
       localStorage.setItem(storageKey, JSON.stringify(formData));
     }
   }, [formData]);
 
   // Save step to localStorage & update query params
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && !editMode) {
       localStorage.setItem(LOCAL_STORAGE_STEP_KEY, currentStep.toString());
       router.replace(`${pathname}?step=${currentStep}`);
     }

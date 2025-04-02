@@ -1,58 +1,127 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { ColumnDef } from "@tanstack/react-table";
 import axiosInstance from "@/config/axios";
 import DataTable from "@/components/shared/data-table";
 import ProductsListFilters from "./filters";
+import Image from "next/image";
+import ProductListRowOptions from "./rowOptions";
+import { ProductListTypes } from "@/types/products/list";
+import { PaginatedResponse } from "@/types/pagination-model";
+import { API_ENDPOINTS } from "@/utils/endpoints";
 
-// Define Product Interface
-interface Product {
-  _id: string;
-  productName: string;
-  basePrice: number;
-  discountedPrice: number;
-  stockQuantity: number;
-  productImage: string | null;
-  createdAt: string;
-}
-
-// Fetch Products API Call
-const fetchProducts = async (): Promise<Product[]> => {
-  const response = await axiosInstance.get("product"); // Use your actual API endpoint
-  return response.data.data; // Accessing 'data' from response
+const fetchProducts = async (
+  page: number,
+  pageSize: number
+): Promise<PaginatedResponse<ProductListTypes>> => {
+  const response = await axiosInstance.get(
+    API_ENDPOINTS.PRODUCT.GELL_PAGINATED_PRODUCTS,
+    {
+      params: { page, size: pageSize },
+    }
+  );
+  return response.data;
 };
-
 const ListProductView = () => {
-  const { data, isLoading, isError } = useQuery<Product[]>({
-    queryKey: ["products"],
-    queryFn: fetchProducts,
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+
+  const { data, isLoading, isError } = useQuery<
+    PaginatedResponse<ProductListTypes>
+  >({
+    queryKey: ["products", page, pageSize],
+    queryFn: () => fetchProducts(page, pageSize),
+    retry: 1,
   });
 
-  // Define Table Columns
-  const columns: { key: keyof Product; label: string; minWidth: string }[] = [
-    { key: "productName", label: "Product Name", minWidth: "200px" },
-    { key: "basePrice", label: "Base Price", minWidth: "100px" },
-    { key: "discountedPrice", label: "Discounted Price", minWidth: "150px" },
-    { key: "stockQuantity", label: "Stock", minWidth: "100px" },
-    // { key: "productImage", label: "Image", minWidth: "150px" },
-    { key: "createdAt", label: "Created At", minWidth: "200px" },
+  const columns: ColumnDef<ProductListTypes>[] = [
+    {
+      minSize: 100,
+      accessorKey: "productName",
+      header: "Product Name",
+      cell: (info) => <span>{info.getValue() as string}</span>,
+    },
+    {
+      minSize: 100,
+      accessorKey: "productImage",
+      header: "Product Image",
+      cell: (info) => {
+        const imageUrl = info.getValue() as string;
+
+        return (
+          <Image
+            src={imageUrl || "/placeholder.png"}
+            alt="Product Image"
+            width={50}
+            height={50}
+            objectFit="cover "
+            className="border  p-2 rounded-md"
+          />
+        );
+      },
+    },
+    {
+      minSize: 20,
+      accessorKey: "basePrice",
+      header: "Base Price",
+      cell: (info) => <span>${info.getValue() as number}</span>,
+    },
+    {
+      minSize: 20,
+      accessorKey: "discountedPrice",
+      header: "Discounted Price",
+      cell: (info) => <span>${info.getValue() as number}</span>,
+    },
+    {
+      minSize: 20,
+      accessorKey: "stockQuantity",
+      header: "Stock",
+      cell: (info) => (
+        <span
+          className={`${
+            (info.getValue() as number) > 0 ? "text-green-500" : "text-red-500"
+          }`}
+        >
+          {info.getValue() as number}
+        </span>
+      ),
+    },
+    {
+      minSize: 20,
+      accessorKey: "createdAt",
+      header: "Created At",
+      cell: (info) => (
+        <span>{new Date(info.getValue() as string).toLocaleDateString()}</span>
+      ),
+    },
+    {
+      minSize: 20,
+
+      header: "Actions",
+      cell: ({ row }) => {
+        const product = row.original as ProductListTypes;
+        console.log("Product data:", product);
+        return product ? <ProductListRowOptions product={product} /> : null;
+      },
+    },
   ];
 
   return (
     <div className="flex flex-col gap-2">
       <ProductsListFilters />
-      <DataTable<Product>
-        columns={columns}
-        data={data || []}
+      <DataTable<ProductListTypes>
+        columns={columns as ColumnDef<ProductListTypes, any>[]}
+        data={data?.data || []}
         isLoading={isLoading}
         isError={isError}
-        currentPage={1}
-        pageSize={10}
-        totalPages={1}
-        totalItems={data?.length || 0}
-        onPageChange={() => {}}
-        onPageSizeChange={() => {}}
+        currentPage={page}
+        pageSize={pageSize}
+        totalPages={data?.totalPages || 1}
+        totalItems={data?.data.length || 0}
+        onPageChange={setPage} // Handle page change
+        onPageSizeChange={setPageSize} // Handle page size change
       />
     </div>
   );

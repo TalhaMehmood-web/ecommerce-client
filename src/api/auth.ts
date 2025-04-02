@@ -36,7 +36,6 @@ export const apiRequest = async <T>(
   data: unknown
 ): Promise<T> => {
   const response = await axiosInstance.post<T>(endpoint, data);
-  console.log("res", response);
   return response.data;
 };
 

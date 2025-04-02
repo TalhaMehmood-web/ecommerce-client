@@ -56,13 +56,13 @@ const ProductsListFilters = () => {
       />
 
       {/* Vendor Select */}
-      <div className="flex items-center col-span-3 h-10 ">
+      <div className="flex items-center col-span-3 ">
         <Controller
           name="vendor"
           control={control}
           render={({ field }) => (
             <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <SelectTrigger className="w-full h-10 rounded-r-none">
+              <SelectTrigger className="w-full py-5 rounded-r-none">
                 <SelectValue placeholder="Select Vendor" />
               </SelectTrigger>
               <SelectContent>
@@ -80,7 +80,7 @@ const ProductsListFilters = () => {
           control={control}
           render={({ field }) => (
             <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <SelectTrigger className="w-full h-10 rounded-l-none  ">
+              <SelectTrigger className="w-full py-5 rounded-l-none font-semibold ">
                 <SelectValue placeholder="Select Category" />
               </SelectTrigger>
               <SelectContent>
@@ -99,7 +99,7 @@ const ProductsListFilters = () => {
         control={control}
         render={({ field }) => (
           <Popover>
-            <PopoverTrigger className="w-full col-span-2" asChild>
+            <PopoverTrigger className="w-full col-span-2 py-5" asChild>
               <Button variant="outline" className="w-full flex justify-between">
                 {field.value ? format(field.value, "PPP") : "Start Date"}
                 <CalendarIcon className="h-4 w-4 ml-2" />

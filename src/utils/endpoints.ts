@@ -5,6 +5,8 @@ const API_ENDPOINTS = {
   },
   PRODUCT: {
     ADD_PRODUCT: "product/add-product",
+    GELL_PAGINATED_PRODUCTS: "product",
+    EDIT_PRODUCT: "product",
   },
 };
 

@@ -47,7 +47,7 @@ export const inventorySchema = z.object({
     .number()
     .int("Stock must be a whole number")
     .min(0, "Stock can't be negative"),
-  stockStatus: z.enum(["In Stock", "Out of Stock", "Low Stock"]),
+  stockStatus: z.string(),
   minOrderQuantity: z
     .number()
     .int("Must be a whole number")

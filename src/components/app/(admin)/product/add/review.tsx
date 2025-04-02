@@ -32,6 +32,7 @@ interface ReviewFormProps {
   onSubmit: () => void;
   onBack: () => void;
   onEdit?: any;
+  editMode?: boolean;
 }
 
 export function ReviewForm({
@@ -39,13 +40,13 @@ export function ReviewForm({
   onSubmit,
   onBack,
   onEdit,
+  editMode,
 }: ReviewFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = () => {
     setIsSubmitting(true);
 
-    // Simulate API call
     setTimeout(() => {
       toast.success("Product successfully added!", {
         description: "Your product has been created and is now live.",
@@ -596,7 +597,8 @@ export function ReviewForm({
             "Submitting..."
           ) : (
             <>
-              Add Product <ChevronRight className="h-4 w-4 ml-1" />
+              {editMode ? "Edit" : "Add"} Product
+              <ChevronRight className="h-4 w-4 ml-1" />
             </>
           )}
         </Button>

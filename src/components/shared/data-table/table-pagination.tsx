@@ -30,7 +30,7 @@ const TablePagination = ({
   onPageChange,
   onPageSizeChange,
 }: TablePaginationProps) => {
-  const pageSizeOptions = [10, 20, 50, 100];
+  const pageSizeOptions = [5, 10, 15, 20];
 
   // Calculate start and end item numbers
   const startItem = totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1;
@@ -48,7 +48,7 @@ const TablePagination = ({
             value={pageSize.toString()}
             onValueChange={(value) => onPageSizeChange(Number(value))}
           >
-            <SelectTrigger className="h-8 w-[70px]">
+            <SelectTrigger size="default" className=" w-[80px]">
               <SelectValue>{pageSize}</SelectValue>
             </SelectTrigger>
             <SelectContent>
