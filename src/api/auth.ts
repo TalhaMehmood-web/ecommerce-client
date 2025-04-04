@@ -8,6 +8,7 @@ interface User {
   role: string;
   isVerified?: boolean;
   company?: string;
+  redirectURL?: string;
 }
 
 export interface ApiResponse<T> {

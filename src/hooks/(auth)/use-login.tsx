@@ -12,21 +12,18 @@ export const useLogin = () => {
     mutationFn: async (data: LoginPayload) => {
       return toast.promise(loginUser(data), {
         loading: "Logging you in ...",
-        success: (data) => {
-          const user = data.data?.user;
+        success: ({ data }) => {
+          const user = data?.user;
+
           if (returnURL) {
             router.push(returnURL);
             return;
           }
-          if (user?.role === "super_admin") {
-            router.push("/super-admin");
-          } else if (user?.role === "admin" && user?.isVerified) {
-            router.push("/admin");
-          } else {
-            router.push("/home");
+          if (user) {
+            router.push(user?.redirectURL || "/home");
           }
 
-          return data.message || "Logged in  successfully!";
+          return "Logged in  successfully!";
         },
         error: (error) =>
           error.response?.data?.message || "An unexpected error occurred.",
