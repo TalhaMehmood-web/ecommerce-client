@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import {
   CompanyFormData,
   CompanyFormValues,
@@ -28,41 +28,20 @@ interface CompanyDetailsFormProps {
 export const CompanyDetailsForm = ({
   data,
   updateData,
-  onValidSubmit,
 }: CompanyDetailsFormProps) => {
   const [logoPreview, setLogoPreview] = useState<string | null>(
     data.logo || null
   );
 
-  const form = useForm<CompanyFormValues>({
-    resolver: zodResolver(companyFormSchema),
-    defaultValues: {
-      name: data.name || "",
-      address: data.address || "",
-      contact: data.contact || "",
-      taxId: data.taxId || "",
-      isActive: data.isActive || false,
-    },
-  });
-
-  // Update form when data prop changes
-  useEffect(() => {
-    form.reset({
-      name: data.name || "",
-      address: data.address || "",
-      contact: data.contact || "",
-      taxId: data.taxId || "",
-      isActive: data.isActive || false,
-    });
-  }, [data, form]);
+  const { reset, watch, control } = useFormContext();
 
   // Watch for form changes and update parent component
   useEffect(() => {
-    const subscription = form.watch((value) => {
+    const subscription = watch((value) => {
       updateData(value as Partial<CompanyFormData>);
     });
     return () => subscription.unsubscribe();
-  }, [form, updateData]);
+  }, [updateData]);
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -82,101 +61,93 @@ export const CompanyDetailsForm = ({
       title="Company Details"
       description="Provide information about your company"
     >
-      <Form {...form}>
-        <form
-          className="space-y-4"
-          onSubmit={form.handleSubmit(() => {
-            toast.success("Company details saved");
-            if (onValidSubmit) onValidSubmit();
-          })}
-        >
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Company Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter company name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <div className="space-y-4">
+        <FormField
+          control={control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Company Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter company name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Address</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Enter company address"
-                    rows={3}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Address</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Enter company address"
+                  rows={3}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={form.control}
-            name="contact"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Contact Number</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter contact number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={control}
+          name="contact"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Contact Number</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter contact number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={form.control}
-            name="taxId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tax ID (Optional)</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter tax ID"
-                    {...field}
-                    value={field.value || ""}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={control}
+          name="taxId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tax ID (Optional)</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter tax ID"
+                  {...field}
+                  value={field.value || ""}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <div className="space-y-2">
-            <FormLabel htmlFor="company-logo">Company Logo</FormLabel>
-            <div className="flex items-center gap-4">
-              {logoPreview && (
-                <div className="h-16 w-16 overflow-hidden rounded-md border">
-                  <img
-                    src={logoPreview}
-                    alt="Company logo preview"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              )}
-              <Input
-                id="company-logo"
-                type="file"
-                accept="image/*"
-                onChange={handleLogoChange}
-                className="w-full"
-              />
-            </div>
+        <div className="space-y-2">
+          <FormLabel htmlFor="company-logo">Company Logo</FormLabel>
+          <div className="flex items-center gap-4">
+            {logoPreview && (
+              <div className="h-16 w-16 overflow-hidden rounded-md border">
+                <img
+                  src={logoPreview}
+                  alt="Company logo preview"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            )}
+            <Input
+              id="company-logo"
+              type="file"
+              accept="image/*"
+              onChange={handleLogoChange}
+              className="w-full"
+            />
           </div>
-        </form>
-      </Form>
+        </div>
+      </div>
     </Step>
   );
 };

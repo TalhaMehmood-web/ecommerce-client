@@ -8,6 +8,7 @@ interface CompanyReviewFormProps {
 }
 
 export const CompanyReviewForm = ({ data }: CompanyReviewFormProps) => {
+  console.log({ data });
   return (
     <Step
       title="Review Company Details"

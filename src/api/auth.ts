@@ -6,6 +6,8 @@ interface User {
   fullName: string;
   email: string;
   role: string;
+  isVerified?: boolean;
+  company?: string;
 }
 
 export interface ApiResponse<T> {

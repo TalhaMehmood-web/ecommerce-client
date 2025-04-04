@@ -8,57 +8,24 @@ import {
   SubscriptionFormValues,
   subscriptionFormSchema,
 } from "@/types/verify";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/components/ui/form";
+import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
-
+import convertToTimestamp from "@/utils/getTimeStamp";
 interface SubscriptionPlanFormProps {
-  data: SubscriptionFormData;
-  updateData: (data: Partial<SubscriptionFormData>) => void;
-  onValidSubmit?: () => void;
+  handleSubscriptionNext: () => void;
 }
-
-export const SubscriptionPlanForm = ({
-  data,
-  updateData,
-  onValidSubmit,
-}: SubscriptionPlanFormProps) => {
-  const form = useForm<SubscriptionFormValues>({
-    resolver: zodResolver(subscriptionFormSchema),
-    defaultValues: {
-      plan: data.plan,
-      purchaseDate: data.purchaseDate,
-      expiryDate: data.expiryDate,
-      isActive: data.isActive,
-      paymentStatus: data.paymentStatus,
-    },
-  });
-
-  // Update form when data prop changes
-  useEffect(() => {
-    form.reset({
-      plan: data.plan,
-      purchaseDate: data.purchaseDate,
-      expiryDate: data.expiryDate,
-      isActive: data.isActive,
-      paymentStatus: data.paymentStatus,
-    });
-  }, [data, form]);
-
+export const SubscriptionPlanForm: React.FC<SubscriptionPlanFormProps> = ({
+  handleSubscriptionNext,
+}) => {
+  const { setValue, getValues } = useFormContext();
+  const data = getValues();
   const handleSelectPlan = (plan: SubscriptionPlan) => {
-    // Update expiry date to 1 month from now
     const expiryDate = new Date();
     expiryDate.setMonth(expiryDate.getMonth() + 1);
 
-    form.setValue("plan", plan);
-    form.setValue("expiryDate", expiryDate);
-
-    updateData({
-      plan,
-      expiryDate,
-    });
-
+    setValue("plan", plan);
+    setValue("expiryDate", convertToTimestamp(expiryDate));
+    handleSubscriptionNext();
     toast.success(
       `${plan.charAt(0).toUpperCase() + plan.slice(1)} plan selected`
     );
@@ -113,29 +80,22 @@ export const SubscriptionPlanForm = ({
       title="Choose a Plan"
       description="Select the subscription plan that fits your needs"
     >
-      <Form {...form}>
-        <form
-          className="space-y-6"
-          onSubmit={form.handleSubmit(() => {
-            if (onValidSubmit) onValidSubmit();
-          })}
-        >
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {plans.map((planInfo) => (
-              <PricingTier
-                key={planInfo.name}
-                name={planInfo.name}
-                price={planInfo.price}
-                description={planInfo.description}
-                features={planInfo.features}
-                highlighted={planInfo.highlighted}
-                selected={data.plan === planInfo.plan}
-                onSelect={() => handleSelectPlan(planInfo.plan)}
-              />
-            ))}
-          </div>
-        </form>
-      </Form>
+      <div className="space-y-6">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {plans.map((planInfo) => (
+            <PricingTier
+              key={planInfo.name}
+              name={planInfo.name}
+              price={planInfo.price}
+              description={planInfo.description}
+              features={planInfo.features}
+              highlighted={planInfo.highlighted}
+              selected={data.plan === planInfo.plan}
+              onSelect={() => handleSelectPlan(planInfo.plan)}
+            />
+          ))}
+        </div>
+      </div>
     </Step>
   );
 };

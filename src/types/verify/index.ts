@@ -8,7 +8,7 @@ export type CompanyFormData = {
   contact: string;
   taxId?: string;
   logo?: string;
-  isActive: boolean;
+  isActive?: boolean;
 };
 
 // Subscription types

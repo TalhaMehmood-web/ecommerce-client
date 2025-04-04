@@ -13,12 +13,15 @@ export const useLogin = () => {
       return toast.promise(loginUser(data), {
         loading: "Logging you in ...",
         success: (data) => {
+          const user = data.data?.user;
           if (returnURL) {
             router.push(returnURL);
             return;
           }
-          if (data.data?.user.role === "super_admin") {
+          if (user?.role === "super_admin") {
             router.push("/super-admin");
+          } else if (user?.role === "admin" && user?.isVerified) {
+            router.push("/admin");
           } else {
             router.push("/home");
           }

@@ -1,47 +1,17 @@
 "use client";
-import { useState } from "react";
-import { SubscriptionFormData } from "@/types/verify";
 import { Step } from "../../components/step";
-import { Check, CreditCard, ExternalLink } from "lucide-react";
+import { CreditCard, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { toast } from "sonner";
+import { FormLabel } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 
-interface PaymentDetailsFormProps {
-  data: SubscriptionFormData;
-  updateData: (data: Partial<SubscriptionFormData>) => void;
-  onValidSubmit?: () => void;
-}
+export const PaymentDetailsForm = () => {
+  const { getValues, setValue, watch } = useFormContext();
+  const data = getValues();
 
-export const PaymentDetailsForm = ({
-  data,
-  updateData,
-  onValidSubmit,
-}: PaymentDetailsFormProps) => {
-  const [processingPayment, setProcessingPayment] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(
-    data.paymentStatus === "paid"
-  );
-  const [paymentMethod, setPaymentMethod] = useState("credit-card");
-
-  const form = useForm();
-
-  const handleProceedToPayment = () => {
-    setProcessingPayment(true);
-
-    // Simulate payment processing - in real app would redirect to Stripe
-    setTimeout(() => {
-      setProcessingPayment(false);
-      setPaymentSuccess(true);
-      updateData({ paymentStatus: "paid" });
-
-      toast.success("Payment successful!");
-      if (onValidSubmit) onValidSubmit();
-    }, 2000);
-  };
+  const paymentMethod = watch("paymentMethod");
 
   return (
     <Step
@@ -70,84 +40,59 @@ export const PaymentDetailsForm = ({
           </div>
         </div>
 
-        <Form {...form}>
-          <form className="space-y-4">
-            <RadioGroup
-              defaultValue="credit-card"
-              className="grid gap-4 md:grid-cols-2"
-              value={paymentMethod}
-              onValueChange={setPaymentMethod}
+        <div className="space-y-4">
+          <RadioGroup
+            defaultValue="credit-card"
+            className="grid gap-4 md:grid-cols-2"
+            value={paymentMethod}
+            onValueChange={(value) => setValue("paymentMethod", value)}
+          >
+            <motion.div
+              whileHover={{ y: -2 }}
+              className="relative rounded-lg border p-4"
             >
-              <motion.div
-                whileHover={{ y: -2 }}
-                className="relative rounded-lg border p-4"
-              >
-                <RadioGroupItem
-                  value="credit-card"
-                  id="credit-card"
-                  className="absolute right-4 top-4"
-                />
-                <FormLabel
-                  htmlFor="credit-card"
-                  className="flex flex-col gap-1"
-                >
-                  <div className="flex items-center gap-2">
-                    <CreditCard className="h-5 w-5" />
-                    <span className="font-medium">Credit Card</span>
-                  </div>
-                  <span className="text-sm text-muted-foreground">
-                    Pay with Visa, Mastercard, etc.
-                  </span>
-                </FormLabel>
-              </motion.div>
+              <RadioGroupItem
+                value="credit-card"
+                id="credit-card"
+                className="absolute right-4 top-4"
+              />
+              <FormLabel htmlFor="credit-card" className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <CreditCard className="h-5 w-5" />
+                  <span className="font-medium">Credit Card</span>
+                </div>
+                <span className="text-sm text-muted-foreground">
+                  Pay with Visa, Mastercard, etc.
+                </span>
+              </FormLabel>
+            </motion.div>
 
-              <motion.div
-                whileHover={{ y: -2 }}
-                className="relative rounded-lg border p-4"
-              >
-                <RadioGroupItem
-                  value="paypal"
-                  id="paypal"
-                  className="absolute right-4 top-4"
-                />
-                <FormLabel htmlFor="paypal" className="flex flex-col gap-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">PayPal</span>
-                  </div>
-                  <span className="text-sm text-muted-foreground">
-                    Pay with your PayPal account
-                  </span>
-                </FormLabel>
-              </motion.div>
-            </RadioGroup>
+            <motion.div
+              whileHover={{ y: -2 }}
+              className="relative rounded-lg border p-4"
+            >
+              <RadioGroupItem
+                value="paypal"
+                id="paypal"
+                className="absolute right-4 top-4"
+              />
+              <FormLabel htmlFor="paypal" className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">PayPal</span>
+                </div>
+                <span className="text-sm text-muted-foreground">
+                  Pay with your PayPal account
+                </span>
+              </FormLabel>
+            </motion.div>
+          </RadioGroup>
 
-            <div className="mt-6">
-              <Button
-                type="button"
-                className="w-full flex items-center justify-center gap-2"
-                onClick={handleProceedToPayment}
-                disabled={processingPayment || paymentSuccess}
-              >
-                {processingPayment ? (
-                  <span>Processing...</span>
-                ) : paymentSuccess ? (
-                  <>
-                    <Check className="h-4 w-4" />
-                    Payment Successful
-                  </>
-                ) : (
-                  <>
-                    Proceed to Payment
-                    <ExternalLink className="h-4 w-4" />
-                  </>
-                )}
-              </Button>
-              <p className="text-xs text-center mt-2 text-muted-foreground">
-                You will be redirected to our secure payment provider
-              </p>
-            </div>
-          </form>
-        </Form>
+          <div className="mt-6">
+            <p className="text-xs text-center mt-2 text-muted-foreground">
+              You will be redirected to our secure payment provider
+            </p>
+          </div>
+        </div>
       </div>
     </Step>
   );
