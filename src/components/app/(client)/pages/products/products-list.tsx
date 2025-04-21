@@ -44,18 +44,6 @@ const ProductsList = () => {
             colorVarinats={product.colorVariants}
           />
         ))}
-        {products?.map((product: any) => (
-          <ProductCard
-            key={product._id}
-            id={product._id}
-            name={product.productName}
-            image={product.productImage}
-            basePrice={product.basePrice}
-            discountedPrice={product.discountedPrice}
-            rating={2}
-            colorVarinats={product.colorVariants}
-          />
-        ))}
       </div>
     </div>
   );

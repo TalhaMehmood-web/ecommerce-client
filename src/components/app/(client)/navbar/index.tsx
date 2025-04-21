@@ -11,10 +11,11 @@ const navItems = [
   { label: "Home", path: "/home" },
   { label: "My Favorite Stores", path: "/favorite-stores" },
   { label: "Products", path: "/products" },
-  { label: "Orders", path: "/orders" },
-  { label: "Checkout", path: "/checkout" },
   { label: "Wishlist", path: "/wishlist" },
+  { label: "Checkout", path: "/checkout" },
+  { label: "My Cart", path: "/cart" },
   { label: "Shipping Info", path: "/shipping-info" },
+  { label: "Orders", path: "/orders" },
   { label: "Be a Vendor", path: "/company" },
 ];
 

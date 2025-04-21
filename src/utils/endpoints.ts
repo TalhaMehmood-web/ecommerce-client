@@ -20,6 +20,13 @@ const API_ENDPOINTS = {
     GET_ALL_PAGINATED_CATEGORIES: "category/paginated-categories",
     GET_ALL: "category/all",
   },
+  SHIPPING_INFO: {
+    CREATE: "shipping-info/create",
+    GET_ALL: "shipping-info",
+  },
+  CART: {
+    GET_MY_CARTS: "cart",
+  },
 };
 
 export { API_ENDPOINTS };
