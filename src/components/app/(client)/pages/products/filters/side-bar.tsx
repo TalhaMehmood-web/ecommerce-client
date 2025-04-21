@@ -1,22 +1,12 @@
 import React from "react";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from "@/components/ui/sidebar";
+import CategoriesFilters from "./categories-filter";
 
 const ProductsFilterSidebar = () => {
   return (
-    <Sidebar variant="sidebar">
-      <SidebarContent>
-        <SidebarMenuItem className="p-2">
-          <SidebarMenuButton asChild>
-            <p>Talha</p>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      </SidebarContent>
-    </Sidebar>
+    <div>
+      <span className="text-lg font-semibold p-2"> Categories</span>
+      <CategoriesFilters />
+    </div>
   );
 };
 

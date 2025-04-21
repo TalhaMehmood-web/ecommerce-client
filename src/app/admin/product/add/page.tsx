@@ -4,7 +4,6 @@ import PageWrapper from "@/components/shared/page-wrapper";
 import { PageBreadCrumb } from "@/components/shared/page-wrapper/breadcrumb";
 import PageTitle from "@/components/shared/page-wrapper/page-title";
 import { initialValue } from "@/components/shared/rich-text-editor";
-
 import React, { Suspense } from "react";
 
 const AddProductPage = () => {
@@ -27,7 +26,7 @@ const AddProductPage = () => {
     },
     inventory: {
       stockQuantity: 0,
-      stockStatus: "In Stock", // Use one of the allowed literal values
+      stockStatus: "In Stock",
       minOrderQuantity: 1,
       maxOrderQuantity: 10,
     },

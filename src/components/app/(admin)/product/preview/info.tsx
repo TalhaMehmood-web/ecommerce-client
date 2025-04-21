@@ -53,24 +53,6 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
     }).format(price);
   };
 
-  // Extract the plain text from the product description
-  const extractText = (description: any): string => {
-    try {
-      return description.root.children
-        .map((paragraph: any) =>
-          paragraph.children
-            .filter((child: any) => child.type === "text")
-            .map((textNode: any) => textNode.text)
-            .join("")
-        )
-        .join("\n");
-    } catch (error) {
-      return "No description available";
-    }
-  };
-
-  const description = extractText(product.basicInfo.productDescription);
-
   // Animation variants
   const itemVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -118,9 +100,9 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
       </motion.div>
 
       {/* Description */}
-      <motion.div variants={itemVariants}>
+      {/* <motion.div variants={itemVariants}>
         <p className="text-muted-foreground">{description}</p>
-      </motion.div>
+      </motion.div> */}
 
       {/* Variations */}
       {product.variations.colorVariants.length > 0 && (

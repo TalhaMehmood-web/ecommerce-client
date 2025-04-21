@@ -23,6 +23,7 @@ interface DataTableProps<T> {
   totalItems: number;
   onPageChange: (page: number) => void;
   onPageSizeChange: (size: number) => void;
+  pageSizeOptions?: number[]; // Optional prop for page size options
 }
 
 export default function DataTable<T>({
@@ -36,6 +37,7 @@ export default function DataTable<T>({
   totalItems,
   onPageChange,
   onPageSizeChange,
+  pageSizeOptions = [5, 10, 20, 50], // Default page size options
 }: DataTableProps<T>) {
   const table = useReactTable({
     data,
@@ -65,6 +67,7 @@ export default function DataTable<T>({
         totalItems={totalItems}
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}
+        pageSizeOptions={pageSizeOptions}
       />
     </TableContainer>
   );

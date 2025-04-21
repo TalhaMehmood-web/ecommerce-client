@@ -22,7 +22,18 @@ const userItems: SidebarItemProps[] = [
     icon: "Inbox",
   },
 ];
-
+const categoryItems: SidebarItemProps[] = [
+  {
+    title: "Create",
+    url: "/super-admin/category/add",
+    icon: "Home",
+  },
+  {
+    title: "List",
+    url: "/super-admin/category/list",
+    icon: "Inbox",
+  },
+];
 export default function SuperAdminSidebar() {
   return (
     <Sidebar collapsible="icon" variant="floating">
@@ -39,6 +50,7 @@ export default function SuperAdminSidebar() {
           </SidebarMenuButton>
         </SidebarMenuItem>
         <SidebarCollapsible title="Manage Users" items={userItems} />
+        <SidebarCollapsible title="Manage Categories" items={categoryItems} />
       </SidebarContent>
     </Sidebar>
   );

@@ -13,5 +13,7 @@ export const useFetchProductById = (id?: string) => {
     queryKey: ["product", id],
     queryFn: () => fetchProductById(id!),
     enabled: !!id,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 };

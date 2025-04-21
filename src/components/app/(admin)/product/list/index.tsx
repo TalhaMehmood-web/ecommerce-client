@@ -11,6 +11,7 @@ import ProductListRowOptions from "./rowOptions";
 import { ProductListTypes } from "@/types/products/list";
 import { PaginatedResponse } from "@/types/pagination-model";
 import { API_ENDPOINTS } from "@/utils/endpoints";
+import Link from "next/link";
 
 const fetchProducts = async (
   page: number,
@@ -34,6 +35,8 @@ const ListProductView = () => {
     queryKey: ["products", page, pageSize],
     queryFn: () => fetchProducts(page, pageSize),
     retry: 1,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   const columns: ColumnDef<ProductListTypes>[] = [
@@ -41,7 +44,14 @@ const ListProductView = () => {
       minSize: 100,
       accessorKey: "productName",
       header: "Product Name",
-      cell: (info) => <span>{info.getValue() as string}</span>,
+      cell: ({ row }) => (
+        <Link
+          href={`/admin/product/preview/${row.original.id}`}
+          className=" block truncate w-48 text-blue-400 hover:underline cursor-pointer hover:font-semibold transition-all duration-300 ease-in-out  hover:text-blue-500  "
+        >
+          {row.original.productName}
+        </Link>
+      ),
     },
     {
       minSize: 100,
@@ -102,7 +112,6 @@ const ListProductView = () => {
       header: "Actions",
       cell: ({ row }) => {
         const product = row.original as ProductListTypes;
-        console.log("Product data:", product);
         return product ? <ProductListRowOptions product={product} /> : null;
       },
     },
@@ -122,6 +131,7 @@ const ListProductView = () => {
         totalItems={data?.data.length || 0}
         onPageChange={setPage} // Handle page change
         onPageSizeChange={setPageSize} // Handle page size change
+        pageSizeOptions={[5, 10, 20, 50]} // Page size options
       />
     </div>
   );

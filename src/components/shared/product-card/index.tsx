@@ -4,15 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
 
 export interface ProductCardProps {
   id: string;
   name: string;
   image: string;
-  price: number;
+  basePrice: number;
+  discountedPrice?: number;
   rating: number;
   reviewCount?: number;
-  colorOptions?: number;
+  colorVarinats?: number;
   onFavoriteToggle?: (id: string) => void;
   isFavorite?: boolean;
   className?: string;
@@ -22,10 +24,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   id,
   name,
   image,
-  price,
+  basePrice,
+  discountedPrice,
   rating,
   reviewCount = 0,
-  colorOptions,
+  colorVarinats,
   onFavoriteToggle,
   isFavorite = false,
   className,
@@ -46,15 +49,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <Card className={cn("w-[300px] h-[400px] overflow-hidden pt-0", className)}>
+    <Card
+      className={cn(
+        "w-[280px] h-auto overflow-hidden bg-transparent shadow-none border-none  pt-0",
+        className
+      )}
+    >
       <div className="relative">
-        <div className="w-full h-64 relative bg-gray-100 flex items-center justify-center">
+        <div className="w-full h-64 relative flex items-center justify-center">
           <Image
             width={200}
             height={200}
             src={image}
             alt={name}
-            className="object-cover w-full h-full"
+            className="object-contain border p-2 rounded-md w-full h-full"
           />
           <Button
             variant="outline"
@@ -82,11 +90,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </Button>
         </div>
       </div>
-      <CardContent className="p-4 space-y-2">
-        <h3 className="font-medium text-sm text-left line-clamp-2 h-10">
-          {name}
-        </h3>
-        <div className="flex items-center">
+      <CardContent className="p-0 space-y-2">
+        <Link href={`/products/preview/${id}`}>
+          <h3 className="font-medium hover:underline hover:text-blue-500 text-blue-400  cursor-pointer text-sm text-left line-clamp-2 h-10">
+            {name}
+          </h3>
+        </Link>
+        <div className="mt-2">
           <div className="flex mr-2">{renderStars()}</div>
           {reviewCount > 0 && (
             <span className="text-sm text-gray-500">
@@ -94,13 +104,27 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </span>
           )}
         </div>
+
+        <div className="flex items-center gap-2">
+          <div className="text-lg  font-light line-through ">
+            ${basePrice.toFixed(2)}
+          </div>
+          <div className="text-2xl font-bold">
+            ${discountedPrice?.toFixed(2)}
+          </div>
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-primary">
+            {colorVarinats} colors
+          </p>
+        </div>
       </CardContent>
-      <CardFooter className="p-4 pt-0 flex flex-col items-start">
-        <div className="text-xl font-bold">${price.toFixed(2)}</div>
-        {colorOptions && colorOptions > 0 && (
-          <div className="text-sm text-gray-500">{colorOptions} colors</div>
+      {/* <CardFooter className="p-4 pt-0 flex flex-col items-start">
+        <div className="text-xl font-bold">${basePrice.toFixed(2)}</div>
+        {colorVarinats && colorVarinats > 0 && (
+          <div className="text-sm text-gray-500">{colorVarinats} colors</div>
         )}
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 };

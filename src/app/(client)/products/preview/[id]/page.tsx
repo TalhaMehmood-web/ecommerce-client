@@ -1,9 +1,7 @@
-import EditProductView from "@/components/app/(admin)/product/edit";
 import ProductDetails from "@/components/app/(admin)/product/preview";
 import PageLoader from "@/components/shared/loading/page-loader";
 import PageWrapper from "@/components/shared/page-wrapper";
 import { PageBreadCrumb } from "@/components/shared/page-wrapper/breadcrumb";
-import PageTitle from "@/components/shared/page-wrapper/page-title";
 import React, { Suspense } from "react";
 
 const EditProductPage = async ({
@@ -18,8 +16,8 @@ const EditProductPage = async ({
       <PageWrapper className="flex flex-col gap-1.5">
         <PageBreadCrumb
           items={[
-            { title: "Dashboard", href: "/admin/dashboard" },
-            { title: "Products", href: "/admin/product/list" },
+            { title: "Home", href: "/home" },
+            { title: "Products", href: "/products" },
             { title: "Product Details" },
           ]}
         />

@@ -20,6 +20,7 @@ interface TablePaginationProps {
   totalItems: number;
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: number) => void;
+  pageSizeOptions?: number[];
 }
 
 const TablePagination = ({
@@ -29,9 +30,8 @@ const TablePagination = ({
   totalItems,
   onPageChange,
   onPageSizeChange,
+  pageSizeOptions,
 }: TablePaginationProps) => {
-  const pageSizeOptions = [5, 10, 15, 20];
-
   // Calculate start and end item numbers
   const startItem = totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const endItem = Math.min(currentPage * pageSize, totalItems);
@@ -52,7 +52,7 @@ const TablePagination = ({
               <SelectValue>{pageSize}</SelectValue>
             </SelectTrigger>
             <SelectContent>
-              {pageSizeOptions.map((size) => (
+              {pageSizeOptions?.map((size) => (
                 <SelectItem key={size} value={size.toString()}>
                   {size}
                 </SelectItem>

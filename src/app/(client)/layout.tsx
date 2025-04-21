@@ -8,8 +8,8 @@ interface AuthLayoutProps {
 
 const AdminLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   return (
-    <div className="w-full min-h-screen flex bg-slate-50  ">
-      <main className="flex-1 flex flex-col max-w-6xl mx-auto container  overflow-hidden ">
+    <div className="w-full min-h-screen flex bg-slate-50 overflow-hidden  ">
+      <main className="flex-1 flex flex-col max-w-6xl mx-auto container  ">
         <Navbar hasLogo className="bg-slate-50" />
         <ClientNavbar />
         <div className="flex-1 ">{children}</div>

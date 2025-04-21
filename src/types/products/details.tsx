@@ -34,6 +34,7 @@ export interface ColorVariant {
 }
 
 export interface ProductData {
+  id?: string;
   basicInfo: {
     productName: string;
     productDescription?: ProductDescription;

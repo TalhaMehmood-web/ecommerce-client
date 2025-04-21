@@ -36,7 +36,7 @@ export function useMultiStepForm<T>(
   const [currentStep, setCurrentStep] = useState<number>(() => {
     if (typeof window !== "undefined" && !editMode) {
       const savedStep = localStorage.getItem(LOCAL_STORAGE_STEP_KEY);
-      return savedStep ? parseInt(savedStep, 10) : 1;
+      return savedStep ? parseInt(savedStep, 10) : 0;
     }
     return 0;
   });
