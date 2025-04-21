@@ -62,7 +62,7 @@ const ProductDetails = ({ id }: { id: string }) => {
         </motion.div>
 
         <motion.div variants={sectionVariants}>
-          <ProductInfo product={product} />
+          <ProductInfo product={product} id={id} />
         </motion.div>
       </div>
 

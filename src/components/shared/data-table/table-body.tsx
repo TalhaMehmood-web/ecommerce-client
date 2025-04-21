@@ -78,7 +78,9 @@ const TableBody: React.FC<TableBodyProps> = ({
             {row.getVisibleCells().map((cell: any, colIndex: number) => (
               <TableCell
                 key={colIndex}
-                style={{ minWidth: cell.column.getSize() }}
+                style={{
+                  minWidth: cell.column.getSize(),
+                }}
                 className="py-3 px-4 whitespace-nowrap"
               >
                 {typeof cell.column.columnDef.cell === "function"
