@@ -5,7 +5,7 @@ import React from "react";
 
 const Cart = () => {
   return (
-    <PageWrapper>
+    <PageWrapper className="flex-col flex  gap-4">
       <PageTitle title="My Carts" />
       <CartView />
     </PageWrapper>
