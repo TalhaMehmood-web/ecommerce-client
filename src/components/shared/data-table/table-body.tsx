@@ -79,7 +79,7 @@ const TableBody: React.FC<TableBodyProps> = ({
               <TableCell
                 key={colIndex}
                 style={{
-                  minWidth: cell.column.getSize(),
+                  minWidth: `${cell.column.getSize()}px`,
                 }}
                 className="py-3 px-4 whitespace-nowrap"
               >

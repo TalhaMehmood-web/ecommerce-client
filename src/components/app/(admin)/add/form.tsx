@@ -57,9 +57,7 @@ const AddProductForm = () => {
     },
   });
   const { handleSubmit, register } = methods;
-  const handleAddProduct = (data: any) => {
-    console.log("data", data);
-  };
+  const handleAddProduct = (data: any) => {};
   return (
     <FormProvider {...methods}>
       <form

@@ -107,7 +107,7 @@ export function BasicInfoForm({ defaultValues, onSubmit }: BasicInfoFormProps) {
       productTags: [],
     },
   });
-  console.log("defaultValues", defaultValues);
+
   const [tag, setTag] = React.useState("");
   const [selectedCategory, setSelectedCategory] = React.useState<string | null>(
     null

@@ -16,7 +16,7 @@ interface RowData {
 
 const ProductCell = ({ row }: { row: RowData }) => {
   return (
-    <div className="flex items-start gap-4">
+    <div className="flex items-start gap-4 w-[250px]">
       <Image
         src={row.original.productImage}
         alt="Product Image"

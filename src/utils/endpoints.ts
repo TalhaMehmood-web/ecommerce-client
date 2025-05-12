@@ -23,6 +23,7 @@ const API_ENDPOINTS = {
   SHIPPING_INFO: {
     CREATE: "shipping-info/create",
     GET_ALL: "shipping-info",
+    GET_BY_LOGGED_IN_USER: "/shipping-info",
   },
   CART: {
     GET_MY_CARTS: "cart",

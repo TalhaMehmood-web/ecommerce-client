@@ -1,22 +1,15 @@
 "use client";
-
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import axiosInstance from "@/config/axios";
 import DataTable from "@/components/shared/data-table";
-// import ProductsListFilters from "./filters";
-import Image from "next/image";
-// import ProductListRowOptions from "./rowOptions";
-import { ProductListTypes } from "@/types/products/list";
 import { PaginatedResponse } from "@/types/pagination-model";
 import { API_ENDPOINTS } from "@/utils/endpoints";
-import Link from "next/link";
-import { Cart, CartItem } from "@/types/cart";
+import { CartItem } from "@/types/cart";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { Dot } from "lucide-react";
 import ProductCell from "./product-cell";
+import { useSelectedCart } from "@/context/selected-cart-context";
 
 const fetchCarts = async (
   page: number,
@@ -43,10 +36,20 @@ const ListCartView = () => {
       maxSize: 10,
       accessorKey: "productId",
       header: "Select",
-      cell: ({ row }) => <Checkbox className="cursor-pointer" />,
+      cell: ({ row }) => {
+        const { toggleItem, isSelected } = useSelectedCart();
+        const item = row.original;
+        return (
+          <Checkbox
+            className="cursor-pointer"
+            checked={isSelected(item.id)}
+            onCheckedChange={() => toggleItem(item)}
+          />
+        );
+      },
     },
     {
-      minSize: 50,
+      minSize: 200,
       accessorKey: "productName",
       header: "Product",
       cell: ({ row }) => <ProductCell row={row} />,
