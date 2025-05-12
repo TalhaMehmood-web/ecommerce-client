@@ -13,6 +13,10 @@ import { PaginatedResponse } from "@/types/pagination-model";
 import { API_ENDPOINTS } from "@/utils/endpoints";
 import Link from "next/link";
 import { Cart, CartItem } from "@/types/cart";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Dot } from "lucide-react";
+import ProductCell from "./product-cell";
 
 const fetchCarts = async (
   page: number,
@@ -36,37 +40,18 @@ const ListCartView = () => {
   });
   const columns: ColumnDef<CartItem>[] = [
     {
+      maxSize: 10,
+      accessorKey: "productId",
+      header: "Select",
+      cell: ({ row }) => <Checkbox className="cursor-pointer" />,
+    },
+    {
       minSize: 50,
       accessorKey: "productName",
-      header: "Product Name",
-      cell: ({ row }) => (
-        <Link
-          href={`/admin/product/preview/${row.original.productId}`}
-          className=" block truncate w-32 text-blue-400 hover:underline cursor-pointer hover:font-semibold transition-all duration-300 ease-in-out  hover:text-blue-500  "
-        >
-          {row.original.productName}
-        </Link>
-      ),
+      header: "Product",
+      cell: ({ row }) => <ProductCell row={row} />,
     },
 
-    {
-      accessorKey: "productImage",
-      header: "Product Image",
-      minSize: 50,
-      cell: (info) => {
-        const imageUrl = info.getValue() as string;
-
-        return (
-          <Image
-            src={imageUrl || "/placeholder.png"}
-            alt="Product Image"
-            width={50}
-            height={50}
-            className="border p-2 rounded-md object-cover"
-          />
-        );
-      },
-    },
     {
       accessorKey: "quantity",
       header: "Quantity",
@@ -74,41 +59,16 @@ const ListCartView = () => {
       cell: (info) => <span>{info.getValue() as number}</span>,
     },
     {
-      accessorKey: "variant",
-      header: "Variant",
-      minSize: 20,
-      cell: (info) => <span>{info.getValue() as string}</span>,
-    },
-    {
       accessorKey: "priceAtAdd",
-      header: "Price at Add",
+      header: "Price ($)",
       minSize: 20,
-      cell: (info) => <span>${info.getValue() as number}</span>,
+      cell: (info) => <span>{info.getValue() as number}</span>,
     },
     {
       accessorKey: "shippingCost",
-      header: "Shipping Cost",
+      header: "Shipping Cost ($)",
       minSize: 20,
-      cell: (info) => <span>${info.getValue() as number}</span>,
-    },
-    {
-      accessorKey: "estimatedDelivery",
-      header: "Estimated Delivery",
-      minSize: 20,
-      cell: (info) => <span>{info.getValue() as string}</span>,
-    },
-    {
-      accessorKey: "material",
-      header: "Material",
-      minSize: 20,
-      cell: (info) => <span>{info.getValue() as string}</span>,
-    },
-    {
-      accessorKey: "color",
-      header: "Color",
-      minSize: 20,
-
-      cell: (info) => <span>{info.getValue() as string}</span>,
+      cell: (info) => <span>{info.getValue() as number}</span>,
     },
   ];
 
