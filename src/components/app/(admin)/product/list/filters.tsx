@@ -37,9 +37,7 @@ const ProductsListFilters = () => {
   const { register, handleSubmit, control, reset } =
     useForm<FilterFormValues>();
 
-  const onSubmit = (data: FilterFormValues) => {
-    console.log("Filters Applied:", data);
-  };
+  const onSubmit = (data: FilterFormValues) => {};
 
   return (
     <motion.div

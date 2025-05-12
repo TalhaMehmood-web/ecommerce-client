@@ -1,18 +1,15 @@
 "use client";
-
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import axiosInstance from "@/config/axios";
 import DataTable from "@/components/shared/data-table";
-// import ProductsListFilters from "./filters";
-import Image from "next/image";
-// import ProductListRowOptions from "./rowOptions";
-import { ProductListTypes } from "@/types/products/list";
 import { PaginatedResponse } from "@/types/pagination-model";
 import { API_ENDPOINTS } from "@/utils/endpoints";
-import Link from "next/link";
-import { Cart, CartItem } from "@/types/cart";
+import { CartItem } from "@/types/cart";
+import { Checkbox } from "@/components/ui/checkbox";
+import ProductCell from "./product-cell";
+import { useSelectedCart } from "@/context/selected-cart-context";
 
 const fetchCarts = async (
   page: number,
@@ -36,37 +33,28 @@ const ListCartView = () => {
   });
   const columns: ColumnDef<CartItem>[] = [
     {
-      minSize: 50,
-      accessorKey: "productName",
-      header: "Product Name",
-      cell: ({ row }) => (
-        <Link
-          href={`/admin/product/preview/${row.original.productId}`}
-          className=" block truncate w-32 text-blue-400 hover:underline cursor-pointer hover:font-semibold transition-all duration-300 ease-in-out  hover:text-blue-500  "
-        >
-          {row.original.productName}
-        </Link>
-      ),
-    },
-
-    {
-      accessorKey: "productImage",
-      header: "Product Image",
-      minSize: 50,
-      cell: (info) => {
-        const imageUrl = info.getValue() as string;
-
+      maxSize: 10,
+      accessorKey: "productId",
+      header: "Select",
+      cell: ({ row }) => {
+        const { toggleItem, isSelected } = useSelectedCart();
+        const item = row.original;
         return (
-          <Image
-            src={imageUrl || "/placeholder.png"}
-            alt="Product Image"
-            width={50}
-            height={50}
-            className="border p-2 rounded-md object-cover"
+          <Checkbox
+            className="cursor-pointer"
+            checked={isSelected(item.id)}
+            onCheckedChange={() => toggleItem(item)}
           />
         );
       },
     },
+    {
+      minSize: 200,
+      accessorKey: "productName",
+      header: "Product",
+      cell: ({ row }) => <ProductCell row={row} />,
+    },
+
     {
       accessorKey: "quantity",
       header: "Quantity",
@@ -74,41 +62,16 @@ const ListCartView = () => {
       cell: (info) => <span>{info.getValue() as number}</span>,
     },
     {
-      accessorKey: "variant",
-      header: "Variant",
-      minSize: 20,
-      cell: (info) => <span>{info.getValue() as string}</span>,
-    },
-    {
       accessorKey: "priceAtAdd",
-      header: "Price at Add",
+      header: "Price ($)",
       minSize: 20,
-      cell: (info) => <span>${info.getValue() as number}</span>,
+      cell: (info) => <span>{info.getValue() as number}</span>,
     },
     {
       accessorKey: "shippingCost",
-      header: "Shipping Cost",
+      header: "Shipping Cost ($)",
       minSize: 20,
-      cell: (info) => <span>${info.getValue() as number}</span>,
-    },
-    {
-      accessorKey: "estimatedDelivery",
-      header: "Estimated Delivery",
-      minSize: 20,
-      cell: (info) => <span>{info.getValue() as string}</span>,
-    },
-    {
-      accessorKey: "material",
-      header: "Material",
-      minSize: 20,
-      cell: (info) => <span>{info.getValue() as string}</span>,
-    },
-    {
-      accessorKey: "color",
-      header: "Color",
-      minSize: 20,
-
-      cell: (info) => <span>{info.getValue() as string}</span>,
+      cell: (info) => <span>{info.getValue() as number}</span>,
     },
   ];
 

@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import ClientNavigationMenu from "./client-navigation-menu";
-import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 
 const navItems = [
@@ -12,7 +11,7 @@ const navItems = [
   { label: "My Favorite Stores", path: "/favorite-stores" },
   { label: "Products", path: "/products" },
   { label: "Wishlist", path: "/wishlist" },
-  { label: "Checkout", path: "/checkout" },
+  // { label: "Checkout", path: "/checkout" },
   { label: "My Cart", path: "/cart" },
   { label: "Shipping Info", path: "/shipping-info" },
   { label: "Orders", path: "/orders" },
@@ -21,7 +20,6 @@ const navItems = [
 
 const ClientNavbar = () => {
   const pathname = usePathname();
-  const router = useRouter();
 
   return (
     <div className="w-full bg-white shadow-md rounded-sm">

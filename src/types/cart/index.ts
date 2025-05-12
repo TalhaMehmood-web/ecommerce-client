@@ -1,8 +1,17 @@
 export interface CartItem {
-  _id: string;
+  id: string; // previously _id
   productId: string;
   productName: string;
+  category: string;
+  subcategory: string;
+  brand: string;
+  basePrice: number;
+  discountedPrice: number;
+  discountPercentage: number;
+  stockQuantity: number;
+  stockStatus: string;
   productImage: string;
+  createdAt: string;
   quantity: number;
   variant: string;
   priceAtAdd: number;
@@ -10,6 +19,7 @@ export interface CartItem {
   estimatedDelivery: string;
   material: string;
   color: string;
+  tax: number;
 }
 
 export interface Cart {
